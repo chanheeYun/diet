@@ -1,14 +1,16 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
+import '../App.css'
 
 export default function RouteNav() {
   const navigate = useNavigate();
 
   return (
-    <div>
-      <button className='bg-lime-500' onClick={() => navigate('/diet')}>식단관리</button>
-      <button className='bg-lime-500' onClick={() => navigate('/train')}>운동관리</button>
-      <button className='bg-lime-500' onClick={() => navigate('/weight')}>체중관리</button>
+    <div className='w-7/12 pl-28 flex flex-row justify-between items-center'>
+      <button className='nav p-3 rounded-xl text-lg hover:bg-slate-100 text-gray-600' onClick={() => navigate('/diet')}>식단 관리</button>
+      <button className='nav p-3 rounded-xl text-lg hover:bg-slate-100 text-gray-600' onClick={() => navigate('/train')}>운동 일지</button>
+      <button className='nav p-3 rounded-xl text-lg hover:bg-slate-100 text-gray-600' onClick={() => navigate('/weight')}>체중 관리</button>
+      <button className='nav p-3 rounded-xl text-lg hover:bg-slate-100 text-gray-600' onClick={() => navigate('/info')}>통합 정보</button>
     </div>
   )
 }

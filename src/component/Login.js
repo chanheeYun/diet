@@ -1,4 +1,5 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 export default function Login() {
   return (
@@ -12,6 +13,7 @@ export default function Login() {
         <input className='bg-slate-500' type='password'></input>
       </div>
       <button className='bg-orange-600'>로그인</button>
+      <Link to='/join'><button className='bg-orange-600'>회원가입</button></Link>
     </div>
   )
 }
