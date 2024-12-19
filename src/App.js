@@ -2,8 +2,8 @@ import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import Home from './component/Home';
-import Join from './component/Join';
 import Login from './component/Login';
+import Join from './component/Join';
 import Foot from './component/Foot';
 import Diet from './component/Diet';
 import Train from './component/Train';
@@ -33,7 +33,7 @@ function App() {
             </div>
           </div>
         </header>
-        <main className='w-full h-full px-16
+        <main className='w-full h-full
                         flex justify-center items-center
                         bg-sky-100'>
           <Routes>
