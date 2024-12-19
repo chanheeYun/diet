@@ -47,7 +47,7 @@ export default function Join() {
             },
             body:JSON.stringify({
                 'name' : nameRef.current.value,
-                'id' : idRef.current.value,
+                'userid' : idRef.current.value,
                 'password' : passRef.current.value
             })
         });
@@ -89,10 +89,10 @@ export default function Join() {
 
   return (
     <div className='w-full flex flex-row justify-center items-center'>
-      <form className='w-1/4 flex flex-col justify-center items-center' onSubmit={postMember}>
+      <form className='nav w-1/4 flex flex-col justify-center items-center' onSubmit={postMember}>
         <label htmlFor='name' className='w-full pl-2 text-xl text-left opacity-50'>이름</label>
         <input
-          className='w-full h-12 my-3 rounded-lg indent-5 text-lg'
+          className='w-full h-12 rounded-lg indent-5 text-lg'
           type='text'
           id='name'
           ref={nameRef}
@@ -103,7 +103,7 @@ export default function Join() {
         </div>
         <div className='w-full flex flex-row justify-between items-center'>
           <input
-            className='w-3/4 h-12 my-3 rounded-lg indent-5 text-lg'
+            className='w-3/4 h-12 rounded-lg indent-5 text-lg'
             type='text'
             id='id'
             ref={idRef}
@@ -120,7 +120,7 @@ export default function Join() {
 
         <label htmlFor='password' className='w-full pl-2 text-xl text-left opacity-50'>비밀번호</label>
         <input
-          className='w-full h-12 my-3 rounded-lg indent-5 text-lg'
+          className='w-full h-12 rounded-lg indent-5 text-lg'
           type='password'
           id='password'
           ref={passRef}
@@ -132,13 +132,13 @@ export default function Join() {
                                       <p className='text-blue-600 text-base w-full text-right'>비밀번호가 일치합니다.</p> }
         </div>
         <input
-          className='w-full h-12 my-3 rounded-lg indent-5 text-lg'
+          className='w-full h-12 rounded-lg indent-5 text-lg'
           type='password'
           id='password2'
           ref={pass2Ref}
           onChange={validatePassword}
         />
-        <button className='w-full h-14  
+        <button className='w-full h-14 mt-5
                           text-xl rounded-lg
                           text-white
                           bg-blue-400 opacity-80

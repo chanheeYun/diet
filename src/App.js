@@ -12,6 +12,8 @@ import RouteNav from './component/RouteNav';
 import Info from './component/Info';
 import Welcome from './component/Welcome';
 import logo from './img/logo2.svg';
+import Asdf from './component/Asdf';
+import Search from './component/Search';
 
 function App() {
   let flag = false;
@@ -20,8 +22,8 @@ function App() {
     <BrowserRouter>
       <div className='w-full h-screen mx-auto
                       flex flex-col justify-center items-center'>
-        <header className='w-full h-24 pr-64 pl-96'>
-          <div className='w-10/12 h-full flex justify-between items-center'>
+        <header className='w-1/2 h-24'>
+          <div className='w-full h-full flex justify-between items-center'>
             <div>
               <Link to='/'>
               <img className='w-16 h-16' src={logo} alt="logo" />
@@ -29,7 +31,9 @@ function App() {
             </div>
             <RouteNav />
             <div className=''>
-              <Link to='/login'><button name='로그인(아웃)' className='nav p-3 pt-4 rounded-xl text-base hover:bg-slate-100 text-gray-400'>{!flag ? '로그인' : '로그아웃'}</button></Link>
+              <Link to='/login'>
+                <button name='로그인(아웃)' className='nav p-3 pt-4 rounded-xl text-base hover:bg-slate-100 text-gray-400'>{!flag ? '로그인' : '로그아웃'}</button>
+              </Link>
             </div>
           </div>
         </header>
@@ -37,6 +41,7 @@ function App() {
                         flex justify-center items-center
                         bg-sky-100'>
           <Routes>
+            <Route path='/temp' element={<Asdf />} />
             <Route path='/' element={<Home />} />
             <Route path='/diet' element={<Diet />} />
             <Route path='/train' element={<Train />} />
@@ -45,6 +50,7 @@ function App() {
             <Route path='/login' element={<Login />} />
             <Route path='/join' element={<Join />} />
             <Route path='/welcome' element={<Welcome />} />
+            <Route path='/search' element={<Search />} />
           </Routes>
         </main>
         <footer className='w-full h-28 flex-shrink-0
