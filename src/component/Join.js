@@ -39,7 +39,7 @@ export default function Join() {
     }
 
     try {
-        const resp = await fetch('http://localhost:8080/board', {
+        const resp = await fetch('http://10.125.121.219:8080/board', {
             method:'POST', 
             headers: {
                 'Content-Type':'application/json',
@@ -97,7 +97,7 @@ export default function Join() {
           id='name'
           ref={nameRef}
         />
-        <div className='w-full flex justify-start items-center'>
+        <div className='w-full flex justify-start items-center mt-2'>
           <label htmlFor='id' className='w-fit pl-2 text-xl opacity-50'>아이디&nbsp;&nbsp;</label>
           <p>{idFlag ? <FcCheckmark /> : ''}</p>
         </div>
@@ -108,7 +108,7 @@ export default function Join() {
             id='id'
             ref={idRef}
           />
-          <button className='w-1/5 h-12 
+          <button className='w-1/5 h-12 pt-1
                           bg-blue-400 opacity-80
                           text-white
                           text-lg rounded-lg
@@ -118,14 +118,14 @@ export default function Join() {
         </div>
 
 
-        <label htmlFor='password' className='w-full pl-2 text-xl text-left opacity-50'>비밀번호</label>
+        <label htmlFor='password' className='w-full pl-2 mt-2 text-xl text-left opacity-50'>비밀번호</label>
         <input
           className='w-full h-12 rounded-lg indent-5 text-lg'
           type='password'
           id='password'
           ref={passRef}
         />
-        <div className='w-full flex flex-row justify-start items-center'>
+        <div className='w-full mt-2 flex flex-row justify-start items-center'>
           <label htmlFor='password2' className='w-full mr-5 pl-2 text-xl text-left opacity-50'>비밀번호 확인</label>
           {!pass2Ref.current || pass2Ref.current.value === '' ? '' : !passCheck ? 
                                       <p className='text-red-600 text-base w-full text-right'>비밀번호가 일치하지 않습니다.</p> :
@@ -138,7 +138,7 @@ export default function Join() {
           ref={pass2Ref}
           onChange={validatePassword}
         />
-        <button className='w-full h-14 mt-5
+        <button className='w-full h-14 mt-5 pt-1
                           text-xl rounded-lg
                           text-white
                           bg-blue-400 opacity-80

@@ -50,10 +50,10 @@ function App() {
             <Route path='/login' element={<Login />} />
             <Route path='/join' element={<Join />} />
             <Route path='/welcome' element={<Welcome />} />
-            <Route path='/search' element={<Search />} />
+            <Route path='/search/:item' element={<Search />} />
           </Routes>
         </main>
-        <footer className='w-full h-28 flex-shrink-0
+        <footer className='w-full h-24 flex-shrink-0
                           flex flex-col justify-center items-center
                           bg-sky-950'>
           <Foot />

@@ -8,38 +8,41 @@ export default function Login() {
 
   const navigate = useNavigate();
 
-  const handleLogin = async (event) => {
+  const handleLogin = async (e) => {
     // 로그인 처리 로직을 구현합니다.
-    event.preventDefault();
-    await new Promise((r) => setTimeout(r, 1000));
+    e.preventDefault();
+    try {
     
-    const response = await fetch(
-      'http://10.125.121.219:8080/login',
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userid: idRef.current.value,
-          password: passRef.current.value,
-        }),
+      const response = await fetch(
+        'http://10.125.121.219:8080/login',
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            userid: idRef.current.value,
+            password: passRef.current.value,
+          }),
+        }
+      );
+      console.log(response)
+      if (response.ok) {
+        const token = response.headers.get("Authorization");
+        if (token) {
+          setLoginCheck(false);
+          sessionStorage.setItem('JWT', token);
+          navigate('/info'); // 로그인 성공시 홈으로 이동합니다.
+        } else {
+            alert("토큰이 반환되지 않았습니다.");
+        }
+      } else {
+        setLoginCheck(true);
       }
-    );
-    console.log(response)
-    const result = await response.json();
-
-    if (response.status === 200) {
-      setLoginCheck(false);
-      // Store token in local storage
-      // sessionStorage.setItem('token', result.token);
-      sessionStorage.setItem('ID', result.userid); // 여기서 userid를 저장합니다.
-      // sessionStorage.setItem('role', result.role); // 여기서 role를 저장합니다.
-      console.log('로그인성공, ID :' + result.userid);
-      navigate('/info'); // 로그인 성공시 홈으로 이동합니다.
-    } else {
-      setLoginCheck(true);
+    } catch(error) {
+      throw new Error("fail to login");
     }
+
   };
 
   const handleLogin2 = () => {

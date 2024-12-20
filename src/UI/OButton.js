@@ -1,13 +1,14 @@
 import React from 'react'
 
-export default function OButton({title}) {
+export default function OButton({name, width, height, handleClick}) {
   return (
-    <div className={`w-56 h-64 m-5
-                    flex justify-center items-center 
-                    text-5xl 
-                    bg-sky-600 rounded-xl`}>
-      {title}
-    </div>
+    <button className={`btn w-${width} h-${height} mt-3 
+                          text-xl rounded-lg
+                          text-white
+                          bg-blue-400 opacity-80
+                          hover:shadow-xl
+                          hover:bg-blue-600`}
+                onClick={handleClick}>{name}</button>
   )
 }
 
