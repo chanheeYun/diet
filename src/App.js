@@ -7,7 +7,6 @@ import Join from './component/Join';
 import Foot from './component/Foot';
 import Diet from './component/Diet';
 import Train from './component/Train';
-import Weight from './component/Weight';
 import RouteNav from './component/RouteNav';
 import Info from './component/Info';
 import Welcome from './component/Welcome';
@@ -22,7 +21,7 @@ function App() {
     <BrowserRouter>
       <div className='w-full h-screen mx-auto
                       flex flex-col justify-center items-center'>
-        <header className='w-1/2 h-24'>
+        <header className='w-2/5 h-24'>
           <div className='w-full h-full flex justify-between items-center'>
             <div>
               <Link to='/'>
@@ -45,7 +44,6 @@ function App() {
             <Route path='/' element={<Home />} />
             <Route path='/diet' element={<Diet />} />
             <Route path='/train' element={<Train />} />
-            <Route path='/weight' element={<Weight />} />
             <Route path='/info' element={<Info />} />
             <Route path='/login' element={<Login />} />
             <Route path='/join' element={<Join />} />
