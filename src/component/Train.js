@@ -1,4 +1,5 @@
 import Calendar from './Calendar';
+import Weight from './Weight';
 
 export default function Train() {
 
@@ -7,8 +8,13 @@ export default function Train() {
       <div className='w-5/12 h-4/5'>
         <Calendar />
       </div>
-      <div className='h-full w-1/2 bg-slate-500 text-center'>
-        운동 및 채중 정보 넣는 곳
+      <div className='h-4/5 w-1/2 bg-slate-500 text-center'>
+        <div className='h-1/6'>
+          <Weight />
+        </div>
+        <div className='w-full h-5/6'>
+          <input type='text' id=''/>
+        </div>
       </div>
     </div>
   )

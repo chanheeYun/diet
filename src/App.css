@@ -17,6 +17,10 @@
   background-size: none;
 } */
 
+.main {
+  height: 743px;
+}
+
 .title {
   font-family: 'TTTogether';
 }

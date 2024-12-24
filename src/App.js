@@ -21,7 +21,7 @@ function App() {
     <BrowserRouter>
       <div className='w-full h-screen mx-auto
                       flex flex-col justify-center items-center'>
-        <header className='w-2/5 h-24'>
+        <header className='w-2/5 h-20 flex-shrink-0'>
           <div className='w-full h-full flex justify-between items-center'>
             <div>
               <Link to='/'>
@@ -36,7 +36,7 @@ function App() {
             </div>
           </div>
         </header>
-        <main className='w-full h-full
+        <main className='w-full main
                         flex justify-center items-center
                         bg-sky-100'>
           <Routes>

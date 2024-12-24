@@ -39,11 +39,10 @@ export default function Join() {
     }
 
     try {
-        const resp = await fetch('http://10.125.121.219:8080/board', {
+        const resp = await fetch('http://10.125.121.219:8080/signup', {
             method:'POST', 
             headers: {
                 'Content-Type':'application/json',
-                'Authorization':'Bearer abcd'
             },
             body:JSON.stringify({
                 'name' : nameRef.current.value,
@@ -58,6 +57,24 @@ export default function Join() {
     };
   };
 
+  const handleCheck = async (id) => {
+    try {
+      const resp = await fetch('http://10.125.121.219:8080/idcheck', {
+          method:'POST', 
+          headers: {
+              'Content-Type':'application/json',
+          },
+          body:JSON.stringify({
+              'userid' : idRef.current.value,
+          })
+      });
+      return resp.ok;
+  } catch(error) {
+      console.log('Error fetching Board:', error);
+      return false;
+  };
+  };
+
   const validateId = (e) => {
     e.preventDefault();
     if (idRef.current.value === '') {
@@ -65,7 +82,7 @@ export default function Join() {
       setIdFlag(false);
       idRef.current.focus();
       return;
-    } else if (idRef.current.value === 'member123') {
+    } else if (handleCheck(idRef.current.value)) {
       alert('사용불가 중복임')
       setIdFlag(false);
       idRef.current.focus();

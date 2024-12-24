@@ -68,9 +68,9 @@ export default function Login() {
           ref={passRef}
         />
          {loginCheck && (
-        <label className='text-red-600'>아이디 혹은 비밀번호가 틀렸습니다.</label>
+        <label className='text-red-600 mt-2'>아이디 혹은 비밀번호가 틀렸습니다.</label>
         )}
-        <button className='w-full h-14 mt-4 
+        <button className='w-full h-14 mt-2 
                           text-xl rounded-lg
                           text-white
                           bg-blue-400 opacity-80
