@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FcCheckmark } from "react-icons/fc";
 
@@ -10,6 +10,7 @@ export default function Join() {
   const passRef = useRef();
   const pass2Ref = useRef();
   const [idFlag, setIdFlag] = useState(false);
+  const [isDuplicate, setIsDuplicate] = useState('');
 
   const postMember = async (e) => {
     e.preventDefault();
@@ -57,43 +58,44 @@ export default function Join() {
     };
   };
 
-  const handleCheck = async (id) => {
-    try {
-      const resp = await fetch('http://10.125.121.219:8080/idcheck', {
-          method:'POST', 
-          headers: {
-              'Content-Type':'application/json',
-          },
-          body:JSON.stringify({
-              'userid' : idRef.current.value,
-          })
-      });
-      return resp.ok;
-  } catch(error) {
-      console.log('Error fetching Board:', error);
-      return false;
-  };
-  };
-
-  const validateId = (e) => {
+  const validateId = async (e) => {
     e.preventDefault();
     if (idRef.current.value === '') {
       alert('아이디를 입력하세요')
       setIdFlag(false);
       idRef.current.focus();
       return;
-    } else if (handleCheck(idRef.current.value)) {
+    } 
+    setIsDuplicate('')
+    try {
+      const resp = await fetch(`http://10.125.121.219:8080/idcheck?userid=${idRef.current.value}`);
+      if (resp.ok) {
+        const data = await resp.json();
+        console.log(data.isDuplicate)
+        setIsDuplicate(data.isDuplicate ? '중복' : '통과');
+      }
+    } catch(error) {
+        console.log('Error fetching Board:', error);
+    };
+  };
+
+  useEffect(() => {
+    if (isDuplicate === '') {
+      setIdFlag(false);  
+      return;
+    }
+    console.log(isDuplicate)
+    if (isDuplicate === '중복') {
       alert('사용불가 중복임')
       setIdFlag(false);
       idRef.current.focus();
       return;
     } else {
       alert('사용가능한 아이디')
-      console.log(pass2Ref.current)
       setIdFlag(true);
       return;
     }
-  };
+  },[isDuplicate]);
 
   const validatePassword = (e) => {
     e.preventDefault();
@@ -115,8 +117,8 @@ export default function Join() {
           ref={nameRef}
         />
         <div className='w-full flex justify-start items-center mt-2'>
-          <label htmlFor='id' className='w-fit pl-2 text-xl opacity-50'>아이디&nbsp;&nbsp;</label>
-          <p>{idFlag ? <FcCheckmark /> : ''}</p>
+          <label htmlFor='id' className='w-fit pl-2 text-xl opacity-50'>아이디&nbsp;</label>
+          <p className='pb-1'>{idFlag ? <FcCheckmark /> : ''}</p>
         </div>
         <div className='w-full flex flex-row justify-between items-center'>
           <input

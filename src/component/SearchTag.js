@@ -1,32 +1,41 @@
-import { IoIosAdd } from "react-icons/io";
+import { IoIosAddCircleOutline } from "react-icons/io";
+import { FaCheck } from "react-icons/fa6";
+import { useState } from 'react';
 
 export default function SearchTag({name, kcal, carbo, protein, fat, sugar, nacl, handleClick}) {
+  const [isAdded, setIsAdded] = useState(false);
+
+  const handleAdd = () => {
+    if(isAdded) return;
+    setIsAdded(!isAdded);
+  };
+
   return (
-    <tr className="bg-white border-b hover:bg-gray-50">
-      <td className="py-4 font-medium text-gray-900 text-center">
+    <tr className={`${!isAdded ? 'bg-white' : 'bg-sky-100'} border-b ${!isAdded ? 'hover:bg-gray-50' : 'hover:bg-sky-50'}`}>
+      <td className="pl-1 py-4 font-medium text-gray-900 text-center text-wrap">
         {name}
       </td>
-      <td className="px-6 py-4 text-base text-center">
+      <td className="py-4 text-base text-center">
         {kcal}
       </td>
-      <td className="px-6 py-4 text-center">
+      <td className="py-4 text-center">
         {carbo}
       </td>
-      <td className="px-6 py-4 text-center">
+      <td className="py-4 text-center">
         {protein}  
       </td>
-      <td className="px-6 py-4 text-center text-sm">
+      <td className="py-4 text-center text-sm">
         {fat}
       </td>
-      <td className="px-6 py-4 text-center text-sm">
+      <td className="py-4 text-center text-sm">
         {sugar}
       </td>
-      <td className="px-6 py-4 text-center text-sm">
+      <td className="py-4 text-center text-sm">
         {nacl}
       </td>
-      <td className="px-6 py-4 text-center text-xl">
-        <button onClick={handleClick} className=''>
-          <IoIosAdd />
+      <td className="py-4 text-center text-xl">
+        <button onClick={() => {handleClick(); handleAdd();}} className=''>
+          {!isAdded ? <IoIosAddCircleOutline /> : <FaCheck />}
         </button>
       </td>
     </tr>

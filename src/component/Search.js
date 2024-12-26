@@ -8,7 +8,7 @@ import noResult from '../img/no-result.png';
 
 export default function Search() {
   const [searchData, setSearchData] = useState();
-  const [added, setAdded] = useState();
+  const [added, setAdded] = useState([]);
   const [sel, setSel] = useState(
                               <div className='w-full h-full
                                               flex flex-col justify-center items-center'>
@@ -19,36 +19,40 @@ export default function Search() {
   const searchRef = useRef();
   const first = useParams().item;
 
-  const add = (item) => {
-    console.log(item)
-    let tm = added.map(comp => comp.food);
-    if (tm.findIndex(item) === -1) {
-      setAdded([...added, {food:item, cnt:1}]);
-    } else {
-      countUp(item);
-    }
+  const add = (food) => {
+    console.log('add 실행')
+    setAdded((prevAdded) => {
+      const alreadyExists = prevAdded.some((item) => item.name === food.name);
+  
+      if (alreadyExists) {
+        alert('이미 선택된 식단입니다.');
+        return prevAdded;
+      }
+  
+      return [...prevAdded, { code: food.code, name: food.name, cnt: 1 }];
+    });
   };
 
-  const countUp = (name) => {
-    setAdded(added.map(item => item.food === name
-                                ? { ...item, cnt: item.cnt + 1 }
-                                : item
-      )
-    );
-  };
+  // const countUp = (name) => {
+  //   setAdded(added.map(item => item.name === name
+  //                               ? { ...item, cnt: item.cnt + 1 }
+  //                               : item
+  //     )
+  //   );
+  // };
 
   const postDiet = () => {
     console.log(added)
   };
   
   useEffect(() => {
-    if (!added) return;
-    const mksSel = () => {
-      let tm = added.map(item => item);
-      return tm;
-    };
-    let temp = mksSel();
-    setSel(temp);
+    if (!added || added.length === 0) return;
+    console.log('현재 추가된 아이템:', added);
+  
+    const selectedItems = added.map(
+      (item) => <p key={item.code}>{item.name}, {item.cnt}</p>
+    );
+    setSel(selectedItems);
   }, [added]);
 
   useEffect(() => {
@@ -79,7 +83,7 @@ export default function Search() {
     console.log('만들기 시작')
     let tm = searchData.map(item => <SearchTag 
                                       key = {item.code}
-                                      name = {item.name.substring(0, 12)} 
+                                      name = {item.name} 
                                       kcal = {item.kcal}
                                       carbo = {item.carbohydrate}
                                       protein = {item.protein}
@@ -109,42 +113,46 @@ export default function Search() {
         }
       </div>
       <div className='w-full h-4/5 flex flex-row justify-center items-center'>
-        <div className='w-3/5 h-full p-0.5 flex flex-col justify-center items-center'>
+        <div className='w-3/5 h-full px-0.5 pb-0.5 flex flex-col justify-center items-center'>
           <div className='w-full h-full 
-                          mb-5 p-4
+                          mb-5 px-2
                           bg-white border-2 rounded-xl border-opacity-50
                           hover:border-blue-500
                           overflow-y-scroll'>
             {
               tags ? 
-              <table className='w-full'>
-                <tr>
-                  <th className="w-3/12 py-4 text-center">
-                    식품명
-                  </th>
-                  <th className="w-2/12 py-4 text-center">
-                    총 열량(kcal)
-                  </th>
-                  <th className="w-1/12 py-4 text-center">
-                    탄수화물(g)
-                  </th>
-                  <th className="w-1/12 py-4 text-center">
-                    단백질(g) 
-                  </th>
-                  <th className="w-1/12 py-4 text-center text-sm">
-                    지방(g)
-                  </th>
-                  <th className="w-1/12 py-4 text-center text-sm">
-                    당류(g)
-                  </th>
-                  <th className="w-1/12 py-4 text-center text-sm">
-                    나트륨(mg)
-                  </th>
-                  <th className="w-1/12 py-4 text-center text-sm">
-                    추가
-                  </th>
-                </tr>
-                {tags}
+              <table className='w-full h-full'>
+                <thead className='sticky top-0 bg-white'>
+                  <tr className=''>
+                    <th className="w-2/12 py-4 text-center text-lg">
+                      식품명
+                    </th>
+                    <th className="w-1/12 py-4 text-center">
+                      총 열량(kcal)
+                    </th>
+                    <th className="w-1/12 py-4 text-center">
+                      탄수화물(g)
+                    </th>
+                    <th className="w-1/12 py-4 text-center">
+                      단백질(g) 
+                    </th>
+                    <th className="w-1/12 py-4 text-center text-base">
+                      지방(g)
+                    </th>
+                    <th className="w-1/12 py-4 text-center text-base">
+                      당류(g)
+                    </th>
+                    <th className="w-1/12 py-4 text-center text-base">
+                      나트륨(mg)
+                    </th>
+                    <th className="w-1/12 py-4 text-center text-base">
+                      추가
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {tags}
+                </tbody>
               </table>
               : <div className='w-full h-full
                                 flex flex-col justify-center items-center'>

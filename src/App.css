@@ -29,7 +29,7 @@
   font-family: 'GmarketSansMedium';
 }
 
-.search {
+.search, .insert {
   font-family: 'Godo';
 }
 
