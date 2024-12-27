@@ -52,9 +52,9 @@ export default function Join() {
             })
         });
         if (resp.ok) navigate('/welcome')
-        else throw new Error("fail to post Board");
+        else throw new Error("fail to post Member");
     } catch(error) {
-        console.log('Error fetching Board:', error);
+        console.log('Error fetching Member:', error);
     };
   };
 

@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react';
 import SearchTag from './SearchTag';
 import OButton from '../UI/OButton';
@@ -18,6 +18,14 @@ export default function Search() {
   const [searchWord, setSearchWord] = useState();
   const searchRef = useRef();
   const first = useParams().item;
+  const gramRefs = useRef({});
+  const navigate = useNavigate();
+
+  const handleInputChange = (code, e) => {
+    const value = e.target.value;
+    gramRefs.current[code] = parseFloat(value);
+    console.log(gramRefs.current); // 모든 input 값을 추적
+  };
 
   const add = (food) => {
     console.log('add 실행')
@@ -28,8 +36,7 @@ export default function Search() {
         alert('이미 선택된 식단입니다.');
         return prevAdded;
       }
-  
-      return [...prevAdded, { code: food.code, name: food.name, cnt: 1 }];
+      return [...prevAdded, {...food}];
     });
   };
 
@@ -41,16 +48,54 @@ export default function Search() {
   //   );
   // };
 
-  const postDiet = () => {
-    console.log(added)
+  const postDiet = async () => {
+    const token = sessionStorage.getItem('JWT');
+    let tm = added.map(item => ({code: item.code, 
+                                 gram: gramRefs.current[item.code], 
+                                 date: new Date()})
+
+    );
+    
+    console.log(tm);
+    try {
+      const resp = await fetch('http://10.125.121.219:8080/member/add', {
+          method:'POST', 
+          headers: {
+              'Content-Type':'application/json',
+              'Authorization': token,
+          },
+          body:JSON.stringify(tm)
+      });
+      if (resp.ok) {
+        alert('내 식단에 저장')
+        navigate('/search')
+      }
+      else throw new Error("fail to post Diet");
+    } catch(error) {
+        console.log('Error fetching Diet:', error);
+    };
   };
   
   useEffect(() => {
     if (!added || added.length === 0) return;
     console.log('현재 추가된 아이템:', added);
   
-    const selectedItems = added.map(
-      (item) => <p key={item.code}>{item.name}, {item.cnt}</p>
+    const selectedItems = added.map(item => <div key={item.code} 
+                                                 className='w-full h-11 flex flex-row 
+                                                            justify-between items-center text-xl
+                                                            bg-slate-50 bg-opacity-60 border-b-2'>
+                                              <div className='w-2/3 text-center'>{item.name}</div>
+                                              <div className='w-1/3'>
+                                                <input
+                                                  className='w-5/6 text-right pr-3 bg-transparent'
+                                                  type='text'
+                                                  name='gram'
+                                                  defaultValue='100'
+                                                  onChange={(e) => handleInputChange(item.code, e)}
+                                                />
+                                                <span className='text-xl'>g</span>
+                                              </div>
+                                            </div>
     );
     setSel(selectedItems);
   }, [added]);
@@ -118,7 +163,7 @@ export default function Search() {
                           mb-5 px-2
                           bg-white border-2 rounded-xl border-opacity-50
                           hover:border-blue-500
-                          overflow-y-scroll'>
+                          scroll-container'>
             {
               tags ? 
               <table className='w-full h-full'>
@@ -166,7 +211,7 @@ export default function Search() {
           <IoIosArrowForward className='w-24 h-24 opacity-20'/>
         </div>
         <div className='w-2/6 h-full'>
-          <div className='h-5/6 border-2 p-4 
+          <div className='h-5/6 border-2 p-4 pt-8
                           flex flex-col justify-start items-center
                           hover:border-blue-500 rounded-xl drop-shadow-lg bg-white'>
             {sel}

@@ -25,7 +25,7 @@
   font-family: 'TTTogether';
 }
 
-.content1, .content2, .btn, .nav {
+.content1, .content2, .btn, .nav, .train_input {
   font-family: 'GmarketSansMedium';
 }
 
@@ -40,6 +40,37 @@
 .date {
   font-family: 'SUITE-Regular';
   font-weight: 200;
+}
+
+.scroll-container {
+  overflow-y: scroll;
+  /* height: 300px; */
+  /* scrollbar-width: thin; /* Firefox */
+  /* scrollbar-color: #888 #f1f1f1; /* Firefox */
+}
+
+/* Webkit 브라우저 전용 */
+.scroll-container::-webkit-scrollbar {
+  width: 10px;
+  height: 20px;
+  
+}
+
+.scroll-container::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 0 20px 20px 0;
+}
+.scroll-container::-webkit-scrollbar-button:vertical:no-button {
+  background: #f1f1f1;
+}
+
+.scroll-container::-webkit-scrollbar-thumb {
+  background: #f1f1f150;
+  border-radius: 12px 12px 12px 12px;
+}
+
+.scroll-container::-webkit-scrollbar-thumb:hover {
+  background: #5b95ff;
 }
 
 @font-face {

@@ -17,6 +17,7 @@ export default function Calendar() {
   };
   const onDateClick = (day) => {
       setSelectedDate(day);
+      console.log(selectedDate);
   };
   return (
   <div className='w-full h-full p-4 bg-slate-100 rounded-lg shadow-lg'>

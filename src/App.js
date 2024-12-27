@@ -1,6 +1,8 @@
 import './App.css';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
+import { isLogined } from './recoil/Atoms';
 import Home from './component/Home';
 import Login from './component/Login';
 import Join from './component/Join';
@@ -13,9 +15,10 @@ import Welcome from './component/Welcome';
 import logo from './img/logo2.svg';
 import Asdf from './component/Asdf';
 import Search from './component/Search';
+import Logout from './component/Logout';
 
 function App() {
-  let flag = false;
+  const [loginFlag, setLoginFlag] = useRecoilState(isLogined);
 
   return (
     <BrowserRouter>
@@ -30,9 +33,17 @@ function App() {
             </div>
             <RouteNav />
             <div className=''>
-              <Link to='/login'>
-                <button name='로그인(아웃)' className='nav p-3 pt-4 rounded-xl text-base hover:bg-slate-100 text-gray-400'>{!flag ? '로그인' : '로그아웃'}</button>
-              </Link>
+              {!loginFlag ?
+                <Link to='/login'>
+                  <button name='로그인' 
+                          className='nav w-24 p-2 pt-3 
+                                    rounded-xl text-base 
+                                    hover:bg-slate-100 text-gray-400'>
+                    로그인
+                  </button>
+                </Link> : 
+                <Logout handleClick={setLoginFlag} />
+              }
             </div>
           </div>
         </header>

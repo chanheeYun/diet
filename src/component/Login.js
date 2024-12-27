@@ -1,10 +1,13 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
+import { isLogined } from '../recoil/Atoms';
 
 export default function Login() {
   const idRef = useRef();
   const passRef = useRef();
-  const [loginCheck, setLoginCheck] = useState(); // 로그인 상태 체크
+  const [loginFlag, setLoginFlag] = useRecoilState(isLogined);
+  const [wrongId, setWrongId] = useState(false);
 
   const navigate = useNavigate();
 
@@ -30,14 +33,17 @@ export default function Login() {
       if (response.ok) {
         const token = response.headers.get("Authorization");
         if (token) {
-          setLoginCheck(false);
           sessionStorage.setItem('JWT', token);
-          navigate('/info'); // 로그인 성공시 홈으로 이동합니다.
+          setLoginFlag(true);
+          console.log(loginFlag)
+          navigate('/'); // 로그인 성공시 홈으로 이동합니다.
         } else {
-            alert("토큰이 반환되지 않았습니다.");
+          setLoginFlag(false);
         }
       } else {
-        setLoginCheck(true);
+        console.log('응답O 로그인X')
+        setLoginFlag(false);
+        setWrongId(true);
       }
     } catch(error) {
       throw new Error("fail to login");
@@ -67,8 +73,8 @@ export default function Login() {
           id='password'
           ref={passRef}
         />
-         {loginCheck && (
-        <label className='text-red-600 mt-2'>아이디 혹은 비밀번호가 틀렸습니다.</label>
+        {wrongId &&(
+          <label className='text-red-600 mt-2'>아이디 혹은 비밀번호가 틀렸습니다.</label> 
         )}
         <button className='w-full h-14 mt-2 
                           text-xl rounded-lg
