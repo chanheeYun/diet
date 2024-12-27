@@ -7,6 +7,7 @@ export default function Train() {
   const [rows, setRows] = useState([]);
   const [inputBox, setInputBox] = useState(false);
   const [selDt, setSelDt] = useState("");
+  const dtRef = useRef();
   const trainRef= useRef(); const weightRef = useRef(); const setsRef = useRef(); const repsRef = useRef();
   <input name='check' type='checkbox' className='w-1/12 h-4'></input>
 
@@ -50,6 +51,7 @@ export default function Train() {
 
   useEffect(() => {
     const dt = getToday();
+    dtRef.current.value = dt;
     setSelDt(dt);
   },[]);
 
@@ -96,7 +98,7 @@ export default function Train() {
                     onClick={() => setInputBox(true)}>add</button>
           </div>
           <div className='h-1/6 w-full flex flex-row justify-end items-center'>
-            <input className='h-1/2 text-xl text-gray-600 pr-4' type='date' name='train_date' onChange={handleDtChange}></input>
+            <input className='h-1/2 text-xl text-gray-600 pr-4' type='date' name='train_date' ref={dtRef} onChange={handleDtChange}></input>
           </div>
         </div>
       </div>
