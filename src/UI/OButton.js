@@ -4,6 +4,7 @@ export default function OButton({name, width, height, handleClick}) {
   return (
     <button className={`btn w-${width} h-${height} mt-3 
                           text-xl rounded-lg
+                          pt-1
                           text-white
                           bg-blue-400 opacity-80
                           hover:shadow-xl
