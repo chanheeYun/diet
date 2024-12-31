@@ -89,6 +89,14 @@ export default function Search() {
     };
   };
   
+  const activeEnter = (e) => {
+    if(e.key === "Enter") {
+      e.preventDefault();  // Enter 키 입력 시 폼 제출을 막습니다.
+      e.stopPropagation(); // 이벤트 전파를 중지시켜 다른 이벤트가 실행되지 않게 합니다.
+      setSearchWord(searchRef.current.value);
+    }
+  }
+
   useEffect(() => {
     // if (!added || added.length === 0) return;
     console.log('현재 추가된 아이템:', added);
@@ -164,7 +172,9 @@ export default function Search() {
                           px-5 my-6 rounded-3xl 
                           flex flex-row justify-center items-center 
                           drop-shadow-lg bg-slate-50'>
-            <input className='search w-full h-14 pl-3 text-xl indent-1 bg-slate-50 tracking-wider' type='text' id='search' ref={searchRef}></input>
+            <input className='search w-full h-14 pl-3 text-xl indent-1 bg-slate-50 tracking-wider' 
+                    type='text' id='search' ref={searchRef}
+                    onKeyDown={(e) => activeEnter(e)}></input>
             <input className='search text-xl mx-2 text-blue-700' type='button' value='검색' onClick={() => setSearchWord(searchRef.current.value)}></input>
           </div>
         </form>
