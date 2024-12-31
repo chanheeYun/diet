@@ -211,7 +211,7 @@ export default function Search() {
                     </th>
                   </tr>
                 </thead>
-                <tbody>
+                <tbody className=''>
                   {tags}
                 </tbody>
               </table>
