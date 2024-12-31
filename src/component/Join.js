@@ -66,16 +66,28 @@ export default function Join() {
       idRef.current.focus();
       return;
     } 
-    setIsDuplicate('')
+
+    const regex = /^[a-zA-Z0-9_-]+$/;
+    if (!regex.test(idRef.current.value)) {
+      alert('아이디는 특수문자나 공백을 포함할 수 없습니다.')
+      setIdFlag(false);
+      idRef.current.focus();
+      return;
+    }
+
     try {
       const resp = await fetch(`http://10.125.121.219:8080/idcheck?userid=${idRef.current.value}`);
       if (resp.ok) {
         const data = await resp.json();
         console.log(data.isDuplicate)
         setIsDuplicate(data.isDuplicate ? '중복' : '통과');
+      } else {
+        setIsDuplicate('')
+        throw new Error("fail to post Diet");
       }
     } catch(error) {
-        console.log('Error fetching Board:', error);
+      setIsDuplicate('')
+      console.log('Error fetching ID Check:', error);
     };
   };
 
@@ -86,12 +98,12 @@ export default function Join() {
     }
     console.log(isDuplicate)
     if (isDuplicate === '중복') {
-      alert('사용불가 중복임')
+      alert('이미 사용 중인 아이디입니다.')
       setIdFlag(false);
       idRef.current.focus();
       return;
     } else {
-      alert('사용가능한 아이디')
+      alert('사용 가능한 아이디 입니다.')
       setIdFlag(true);
       return;
     }

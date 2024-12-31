@@ -17,8 +17,20 @@
   background-size: none;
 } */
 
-.main {
-  height: 743px;
+html, body, #root {
+  height: 100vh;
+}
+
+header {
+  height: 9%;
+}
+
+main {
+  height: 81%;
+}
+
+footer {
+  height: 10%;
 }
 
 .title {

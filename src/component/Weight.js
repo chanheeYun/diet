@@ -18,7 +18,7 @@ export default function Weight({weight, setWeight, date}) {
   
   const sendWeight = async () => {
     const token = sessionStorage.getItem('JWT');
-    const weight = weightRef.current.value;
+    const weight2 = weightRef.current.value;
     console.log('date:', date)
     console.log('weight:', weight)
     try {
@@ -29,17 +29,22 @@ export default function Weight({weight, setWeight, date}) {
               'Authorization': token,
           },
           body:JSON.stringify({
-            'kg': weight,
+            'weight': weight2,
+            'muscle': muscleRef.current.value,
+            'fat': fatRef.current.value,
+            'water': waterRef.current.value,
+            'mineralRef': mineralRef.current.value,
+            'proteinRef': proteinRef.current.value,
             'date': date
           })
       });
       if (resp.ok) {
-        setWeight(weight)
         console.log(resp)
+        setWeight(weight2)
       }
-      else throw new Error("fail to post Diet");
+      else throw new Error("fail to post Weight");
     } catch(error) {
-        console.log('Error fetching Diet:', error);
+        console.log('Error fetching Weight:', error);
     };
   };
 
@@ -53,7 +58,7 @@ export default function Weight({weight, setWeight, date}) {
       {
         modalOpen &&
         <div className='w-full h-full'>
-          <div className='absolute w-1/3 h-1/2 ml-36 mt-8 
+          <div className='absolute w-1/3 h-1/2 ml-32 mt-8 
                         bg-gray-100 border-2 flex flex-col justify-between pb-3 items-center 
                         rounded-2xl shadow-2xl' >
             <div className='h-1/6 w-full flex flex-row justify-end items-start'>

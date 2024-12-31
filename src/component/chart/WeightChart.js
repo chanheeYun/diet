@@ -5,7 +5,7 @@ export default function WeightChart ({ data }) {
   return (
     <ResponsiveLine
         data={data}
-        margin={{ top: 20, right: 30, bottom: 50, left: 50 }}
+        margin={{ top: 20, right: 30, bottom: 40, left: 50 }}
         xScale={{ type: 'point' }}
         yScale={{
             type: 'linear',
@@ -21,7 +21,7 @@ export default function WeightChart ({ data }) {
           tickSize: 5,
           tickPadding: 5,
           tickRotation: 0,
-          legend: 'Date',
+          legend: '',
           legendOffset: 36,
           legendPosition: 'middle',
           truncateTickAt: 0

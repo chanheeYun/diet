@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useCallback, useRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react';
 import SearchTag from './SearchTag';
@@ -16,6 +16,7 @@ export default function Search() {
                               </div>);
   const [tags, setTags] = useState();
   const [searchWord, setSearchWord] = useState();
+  const [tagStates, setTagStates] = useState({});
   const searchRef = useRef();
   const first = useParams().item;
   const gramRefs = useRef({});
@@ -24,11 +25,16 @@ export default function Search() {
   const handleInputChange = (code, e) => {
     const value = e.target.value;
     gramRefs.current[code] = parseFloat(value);
-    console.log(gramRefs.current); // 모든 input 값을 추적
+    console.log(gramRefs.current);
   };
 
   const add = (food) => {
     console.log('add 실행')
+    setTagStates((prev) => ({
+      ...prev,
+      [food.code]: !prev[food.code],
+    }));
+
     setAdded((prevAdded) => {
       const alreadyExists = prevAdded.some((item) => item.name === food.name);
   
@@ -40,13 +46,13 @@ export default function Search() {
     });
   };
 
-  // const countUp = (name) => {
-  //   setAdded(added.map(item => item.name === name
-  //                               ? { ...item, cnt: item.cnt + 1 }
-  //                               : item
-  //     )
-  //   );
-  // };
+  const delAdded = useCallback((code) => {
+    setTagStates((prev) => ({
+      ...prev,
+      [code]: !prev[code],
+    }));
+    setAdded(prev => prev.filter(item => item.code !== code));
+  }, []);
 
   const postDiet = async () => {
     const token = sessionStorage.getItem('JWT');
@@ -84,7 +90,7 @@ export default function Search() {
   };
   
   useEffect(() => {
-    if (!added || added.length === 0) return;
+    // if (!added || added.length === 0) return;
     console.log('현재 추가된 아이템:', added);
   
     const selectedItems = added.map(item => <div key={item.code} 
@@ -92,20 +98,22 @@ export default function Search() {
                                                             justify-between items-center text-xl
                                                             bg-slate-50 bg-opacity-60 border-b-2'>
                                               <div className='w-2/3 text-center'>{item.name}</div>
-                                              <div className='w-1/3'>
+                                              <div className='w-1/3 pr-2 flex flex-row justify-end items-center'>
                                                 <input
-                                                  className='w-5/6 text-right pr-3 bg-transparent'
+                                                  className='w-3/6 text-right pr-1 mr-1 bg-transparent'
                                                   type='text'
                                                   name='gram'
                                                   defaultValue='100'
                                                   onChange={(e) => handleInputChange(item.code, e)}
                                                 />
-                                                <span className='text-xl'>g</span>
+                                                <span className='text-xl w-fit'>g</span>
+                                                <button className='text-xl w-fit ml-6'
+                                                        onClick={() => delAdded(item.code)}>×</button>
                                               </div>
                                             </div>
     );
     setSel(selectedItems);
-  }, [added]);
+  }, [added, delAdded]);
 
   useEffect(() => {
     console.log(first)
@@ -142,9 +150,10 @@ export default function Search() {
                                       fat = {item.fat}
                                       sugar = {item.sugar}
                                       nacl = {item.natrium}
-                                      handleClick={() => add(item)} />);
+                                      handleClick={() => add(item)}
+                                      isAdded={tagStates[item.code] || false} />);
     setTags(tm);
-  }, [searchData]);
+  }, [searchData, tagStates]);
   
   return (
     <div className='w-10/12 h-full mb-2 flex flex-col justify-start items-center'>

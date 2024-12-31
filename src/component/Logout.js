@@ -12,9 +12,9 @@ export default function Logout({handleClick}) {
   }
   return (
     <button name='로그아웃' 
-                        className='nav w-24 p-2 pt-3 rounded-xl 
-                                  text-base hover:bg-slate-100 
-                                  text-gray-400'
+                        className='nav w-24 px-2 pt-1.5 
+                                  rounded-xl text-base 
+                                  hover:text-blue-500 text-gray-400'
                         onClick={() => {handleClick(false); logout();}}>
       로그아웃
     </button>

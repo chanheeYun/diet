@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useCallback } from 'react';
 import Weight from './Weight';
 import { HiOutlineXMark } from "react-icons/hi2";
 
@@ -9,14 +9,17 @@ export default function Train() {
   const [inputBox, setInputBox] = useState(false);
   const [selDt, setSelDt] = useState('');
   const [tData, setTData] = useState();
-  const [newData, setNewData] = useState();
+  const [newData, setNewData] = useState([]);
   const dtRef = useRef();
   const trainRef= useRef(); const weightRef = useRef(); const setsRef = useRef(); const repsRef = useRef();
-  <input name='check' type='checkbox' className='w-1/12 h-4'></input>
 
   const mksRow2 = (training, weight, sets, reps) => {
+    if (!training || !weight || !sets || !reps) {
+      alert('모든 항목을 입력해 주세요.')
+      return;
+    }
     setInputBox(false);
-    const newRow = <div className='w-full rounded-xl h-12 flex flex-row justify-around items-center train_input'>
+    const newRow = <div key={training} className='w-full rounded-xl h-12 flex flex-row justify-around items-center train_input'>
                     <input name='check' type='checkbox' className='w-1/12 h-4'></input>
                     <div className='w-1/3 align-middle indent-3 border-r-2 text-base'>{training}</div>
                     <div className='w-1/6 text-center border-r-2 text-base'>{weight}&nbsp;kg</div>
@@ -24,7 +27,7 @@ export default function Train() {
                     <div className='w-1/12 flex justify-center text-xl'><HiOutlineXMark /></div>
                     <div className='w-1/12 text-right pr-7 border-r-2 text-base'>{reps}&nbsp;회</div>
                     <div className='w-1/6'>
-                      <button className='text-blue-500 text-left px-2 py-1 hover:underline underline-offset-4' onClick={delRow}>Delete</button>
+                      <button className='text-blue-500 text-left px-2 py-1 hover:underline underline-offset-4' onClick={() => delRow2(training)}>Delete</button>
                     </div>
                   </div>
     setRows2((prevRows) => {
@@ -32,18 +35,33 @@ export default function Train() {
     });
   };
 
-  const getTrainData = async () => {
+  const delRow2 = (training) => {
+    setRows2(prev => prev.filter(item => item.training !== training));
+  };
+
+  const saveNewTrain = () => {
+    if (!newData) {
+      alert('새로 저장할 내용이 없습니다.');
+      return;
+    }
+
+    setNewData((prevData) => 
+      [...prevData, {name:trainRef.current.value, weight:weightRef.current.value, sets:setsRef.current.value, reps:repsRef.current.value}]
+    );
+    mksRow2(trainRef.current.value, weightRef.current.value, setsRef.current.value, repsRef.current.value);
+  };
+
+  const getTrainData = useCallback(async (date) => {
     const token = sessionStorage.getItem('JWT');
     
     if (!token) {
-      // JWT가 없으면 로그인 페이지로 이동
       alert('session이 만료되어 로그인 페이지로 이동합니다.')
       window.location.href = '/login';
       return;
     }
 
     try {
-      let dt = selDt.replace('-', '');
+      let dt = date.replaceAll('-', '');
       const url = `http://10.125.121.219:8080/member/train?date=${dt}`;
       await fetch(url, {
           method:'get', 
@@ -58,22 +76,14 @@ export default function Train() {
     } catch(error) {
       console.log('Error fetching Train:', error);
     };
-  };
+  }, []);
 
   const postTrain = async () => {
     const token = sessionStorage.getItem('JWT');
-    
-    if (!token) {
-      alert('session이 만료되어 로그인 페이지로 이동합니다.')
-      window.location.href = '/login';
-      return;
-    }
 
-    let tm = rows2.map(item => ({}));
-    
-    console.log(tm);
+    console.log(newData);
     try {
-      let dt = selDt.replace('-', '');
+      let dt = selDt.replaceAll('-', '');
       const url = `http://10.125.121.219:8080/member/train?date=${dt}`;
       const resp = await fetch(url, {
           method:'POST', 
@@ -81,7 +91,7 @@ export default function Train() {
               'Content-Type':'application/json',
               'Authorization': token,
           },
-          body:JSON.stringify(tm)
+          body:JSON.stringify(newData)
       });
       if (resp.ok) {
         getTrainData();
@@ -92,18 +102,11 @@ export default function Train() {
     };
   };
 
-  const delRow = async () => {
+  const delRow = useCallback(async () => {
     const token = sessionStorage.getItem('JWT');
     
-    if (!token) {
-      // JWT가 없으면 로그인 페이지로 이동
-      alert('session이 만료되어 로그인 페이지로 이동합니다.')
-      window.location.href = '/login';
-      return;
-    }
-
     try {
-      let dt = selDt.replace('-', '');
+      let dt = selDt.replaceAll('-', '');
       const url = `http://10.125.121.219:8080/member/train?date=${dt}`;
       const resp = await fetch(url, {
           method:'DELETE', 
@@ -119,7 +122,7 @@ export default function Train() {
     } catch(error) {
         console.log('Error fetching Train:', error);
     };
-  };
+  }, [selDt]);
 
   const transDate = (date) => {
     let dt = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
@@ -132,16 +135,16 @@ export default function Train() {
     console.log(selDt)
   };
 
-  // useEffect(() => {
-  //   let dt = transDate(new Date());
-  //   dtRef.current.value = dt;
-  //   setSelDt(dt);
-  // },[]);
+  useEffect(() => {
+    let dt = transDate(new Date());
+    dtRef.current.value = dt;
+    setSelDt(dt);
+  },[]);
 
   useEffect(() => {
     if (!selDt) return;
-    getTrainData();
-  },[selDt]);
+    getTrainData(selDt);
+  },[selDt, getTrainData]);
 
   useEffect(() => {
     if (!tData) return;
@@ -153,11 +156,11 @@ export default function Train() {
                                  <div className='w-1/12 flex justify-center text-xl'><HiOutlineXMark /></div>
                                  <div className='w-1/12 text-right pr-7 border-r-2 text-base'>{item.reps}&nbsp;회</div>
                                  <div className='w-1/6'>
-                                   <button className='text-blue-500 text-left px-2 py-1 hover:underline underline-offset-4' onClick={delRow}>Delete</button>
+                                   <button className='text-blue-500 text-left px-2 py-1 hover:underline underline-offset-4' onClick={() => delRow(item.id)}>Delete</button>
                                  </div>
                                </div>);
     setRows1(tm);
-  }, [tData]);
+  }, [tData, delRow]);
 
   return (
     <div className='w-10/12 h-full flex flex-row justify-center items-center'>
@@ -188,8 +191,7 @@ export default function Train() {
                    placeholder='Reps' ref={repsRef}></input>
             <div className='w-1/6 h-8'>
               <button className='text-blue-500 text-left px-2 py-1 hover:underline underline-offset-4' 
-                      onClick={() => {setNewData((prevData) => [...prevData, {name:trainRef.current.value, weight:weightRef.current.value, sets:setsRef.current.value, reps:repsRef.current.value}]);
-                                      mksRow2(trainRef.current.value, weightRef.current.value, setsRef.current.value, repsRef.current.value);}}>Save</button>
+                      onClick={saveNewTrain}>Save</button>
             </div>
           </div>}
           <div className='w-full h-5/6 border-t-2'>
