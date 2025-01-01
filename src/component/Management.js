@@ -50,15 +50,15 @@ export default function Management() {
     });
   }, [getDetail]);
 
-  const getDData = useCallback(async (date) => {
-    const token = sessionStorage.getItem('JWT');
+  const getDData = useCallback(async (date, token) => {
+    // const token = sessionStorage.getItem('JWT');
     
-    if (!token) {
-      // JWT가 없으면 로그인 페이지로 이동 처음 로드 시에 한번만 확인
-      alert('session이 만료되어 로그인 페이지로 이동합니다.')
-      window.location.href = '/login';
-      return;
-    }
+    // if (!token) {
+    //   // JWT가 없으면 로그인 페이지로 이동 처음 로드 시에 한번만 확인
+    //   alert('session이 만료되어 로그인 페이지로 이동합니다.')
+    //   window.location.href = '/login';
+    //   return;
+    // }
 
     try {
       let dt = date.replaceAll('-', '');
@@ -147,12 +147,12 @@ export default function Management() {
     
     const fetchData = async () => {
       const token = sessionStorage.getItem('JWT');
-      if (!token) {
-        alert('session이 만료되어 로그인 페이지로 이동합니다.');
-        window.location.href = '/login';
-        return;
-      }
-      await getDData(tempDt);
+      // if (!token) {
+      //   alert('session이 만료되어 로그인 페이지로 이동합니다.');
+      //   window.location.href = '/login';
+      //   return;
+      // }
+      await getDData(tempDt, token);
     };
   
     fetchData();
@@ -199,17 +199,16 @@ export default function Management() {
   }, [dData, tagStates, viewDetail, selectedTags]);
 
   return (
-    <div className='w-full h-full flex flex-row justify-between pl-40 items-center'>
+    <div className='w-10/12 h-full flex flex-row justify-between items-center'>
       <div className='w-5/12 h-4/5'>
         <Calendar selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
       </div>
       <div className='w-7/12 h-full py-10 px-20'>
-        <div className='w-10/12 h-full py-5 
+        <div className='w-full h-full py-2
                         border-2 border-blue-300 bg-white bg-opacity-50
                         flex flex-col justify-start items-center
                         rounded-xl'>
           <div className='h-5/6 w-full scroll-container'>
-
             {tags}
           </div>
           <div className='w-full h-1/6 pl-2 flex flex-row justify-start items-end'>

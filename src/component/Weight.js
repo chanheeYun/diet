@@ -40,7 +40,7 @@ export default function Weight({weight, setWeight, date}) {
       });
       if (resp.ok) {
         console.log(resp)
-        setWeight(weight2)
+        setWeight(weight2) // 몸무게 정보가 없을 경우에 어떤 형태로 반환 되는지 확인하고 그에 따른 처리를 추가
       }
       else throw new Error("fail to post Weight");
     } catch(error) {

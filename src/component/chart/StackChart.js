@@ -12,7 +12,7 @@ export default function StackChart({ data }) {
         '나트륨',
         ]}
         indexBy="date"
-        margin={{ top: 10, right: 100, bottom: 50, left: 80 }}
+        margin={{ top: 10, right: 100, bottom: 50, left: 60 }}
         padding={0.3}
         valueScale={{ type: 'linear' }}
         indexScale={{ type: 'band', round: true }}

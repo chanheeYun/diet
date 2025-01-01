@@ -1,10 +1,18 @@
-import React, { useCallback, useRef } from 'react'
+import React, { useCallback, useRef, forwardRef } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
 import { useState, useEffect } from 'react';
 import SearchTag from './SearchTag';
 import OButton from '../UI/OButton';
 import { IoIosArrowForward } from "react-icons/io";
 import noResult from '../img/no-result.png';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+
+const ExampleCustomInput = forwardRef(({ value, onClick, className }, ref) => (
+  <button className={className} onClick={onClick} ref={ref}>
+    {value}
+  </button>
+));
 
 export default function Search() {
   const [searchData, setSearchData] = useState();
@@ -22,6 +30,8 @@ export default function Search() {
   const gramRefs = useRef({});
   const navigate = useNavigate();
 
+  const [startDate, setStartDate] = useState(new Date());
+  
   const handleInputChange = (code, e) => {
     const value = e.target.value;
     gramRefs.current[code] = parseFloat(value);
@@ -54,30 +64,40 @@ export default function Search() {
     setAdded(prev => prev.filter(item => item.code !== code));
   }, []);
 
+  const transDate = (date) => {
+    if (!date) return '';
+    let dt = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+    let dtArr = dt.split('-').map(a => a.length < 2 ? '0' + a : a).join('-');
+    return dtArr;
+  };
+
   const postDiet = async () => {
+    const date = new Date(startDate);
+    let dt = transDate(date).replaceAll('-', '');
+    console.log(dt)
     const token = sessionStorage.getItem('JWT');
     
-    if (!token) {
-      alert('session이 만료되어 로그인 페이지로 이동합니다.')
-      window.location.href = '/login';
-      return;
-    }
+    // if (!token) {
+    //   alert('session이 만료되어 로그인 페이지로 이동합니다.')
+    //   window.location.href = '/login';
+    //   return;
+    // }
 
-    let tm = added.map(item => ({code: item.code, 
+    let data = added.map(item => ({code: item.code, 
                                  gram: gramRefs.current[item.code], 
                                  date: new Date()})
 
     );
     
-    console.log(tm);
+    console.log(data);
     try {
-      const resp = await fetch('http://10.125.121.219:8080/member/add', {
+      const resp = await fetch(`http://10.125.121.219:8080/member/add?date=${dt}`, {
           method:'POST', 
           headers: {
               'Content-Type':'application/json',
               'Authorization': token,
           },
-          body:JSON.stringify(tm)
+          body:JSON.stringify(data)
       });
       if (resp.ok) {
         alert('내 식단에 저장')
@@ -237,10 +257,20 @@ export default function Search() {
           <IoIosArrowForward className='w-24 h-24 opacity-20'/>
         </div>
         <div className='w-2/6 h-full'>
-          <div className='h-5/6 border-2 p-4 pt-8
-                          flex flex-col justify-start items-center
+          <div className='h-5/6 border-2 px-4 pt-2 scroll-container
                           hover:border-blue-500 rounded-xl drop-shadow-lg bg-white'>
-            {sel}
+            <div className='w-full h-1/6 pl-32'>
+              <DatePicker
+                className='text-blue-950 text-lg date tracking-wide'
+                dateFormat='yyyy년 MM월 dd일'
+                selected={startDate}
+                onChange={(date) => setStartDate(date)}
+                customInput={<ExampleCustomInput className="example-custom-input" />}
+              />
+            </div>
+            <div className='w-full h-5/6 justify-start items-center flex flex-col '>
+              {sel}
+            </div>
           </div>
           <div className='h-1/6'>
             <OButton name='내 식단에 추가하기' width='full' height='14' handleClick={postDiet} />

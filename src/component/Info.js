@@ -156,12 +156,12 @@ export default function Info() {
   const getPersonalData = useCallback(async () => {
     const token = sessionStorage.getItem('JWT');
     
-    if (!token) {
-      // JWT가 없으면 로그인 페이지로 이동
-      alert('session이 만료되어 로그인 페이지로 이동합니다.')
-      window.location.href = '/login';
-      return;
-    }
+    // if (!token) {
+    //   // JWT가 없으면 로그인 페이지로 이동
+    //   alert('session이 만료되어 로그인 페이지로 이동합니다.')
+    //   window.location.href = '/login';
+    //   return;
+    // }
 
     try {
       let dt = selectedDate.replaceAll('-', '');
@@ -199,6 +199,9 @@ export default function Info() {
                         border-2 border-blue-300 bg-white bg-opacity-50
                         rounded-xl'>
           <Chart datas={datas} />
+          <div className='w-full mt-16 px-7 text-center text-2xl'>
+            운동 정보
+          </div>
         </div>
       </div>
     </div>

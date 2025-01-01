@@ -16,7 +16,7 @@ export default function Chart({datas}) {
       }
       {datas.muscle && datas.fat &&
         <div className='w-full h-full'>
-          <div className='w-full h-fit mt-7 mb-2 text-center chart text-2xl pl-5'>지방·골격근 분석</div>
+          <div className='w-full h-fit mt-10 mb-2 text-center chart text-2xl pl-5'>지방·골격근 분석</div>
           <div className='w-full h-full flex flex-col justify-center items-start'>
             <BodyBarChart data={datas['muscle']} />
             <BodyBarChart data={datas['fat']} />
@@ -24,7 +24,7 @@ export default function Chart({datas}) {
         </div>
       }
       <div className='w-full h-full'>
-        <div className='w-full h-fit mt-7 text-center chart text-2xl pl-5'>주간 영양 섭취 현황</div>
+        <div className='w-full h-fit mt-10 text-center chart text-2xl pl-5'>주간 영양 섭취 현황</div>
         <StackChart data={datas['diet']} />
       </div>
       <div className='w-full h-full'>
