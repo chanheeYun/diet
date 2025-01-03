@@ -51,7 +51,7 @@ export default function Join() {
                 'password' : passRef.current.value
             })
         });
-        if (resp.ok) navigate('/welcome')
+        if (resp.ok) navigate('/login')
         else throw new Error("fail to post Member");
     } catch(error) {
         console.log('Error fetching Member:', error);

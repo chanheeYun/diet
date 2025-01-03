@@ -11,7 +11,6 @@ import Diet from './component/Diet';
 import Train from './component/Train';
 import RouteNav from './component/RouteNav';
 import Info from './component/Info';
-import Welcome from './component/Welcome';
 import logo from './img/logo2.svg';
 import Asdf from './component/Asdf';
 import Search from './component/Search';
@@ -72,7 +71,6 @@ function App() {
             <Route path='/info' element={<Info />} />
             <Route path='/login' element={<Login />} />
             <Route path='/join' element={<Join />} />
-            <Route path='/welcome' element={<Welcome />} />
             <Route path='/search/:item' element={<Search />} />
           </Routes>
         </main>
