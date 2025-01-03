@@ -148,6 +148,7 @@ export default function Train() {
 
   useEffect(() => {
     if (!tData) return;
+    console.log('tData', tData)
     let tm = tData.map(item => <div key={item.id} className='w-full rounded-xl h-12 flex flex-row justify-around items-center train_input'>
                                  <input name='check' type='checkbox' className='w-1/12 h-4'></input>
                                  <div className='w-1/3 align-middle indent-3 border-r-2 text-base'>{item.name}</div>

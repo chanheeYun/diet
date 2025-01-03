@@ -101,7 +101,7 @@ export default function Search() {
       });
       if (resp.ok) {
         alert('내 식단에 저장')
-        navigate('/search')
+        navigate('/manage')
       }
       else throw new Error("fail to post Diet");
     } catch(error) {
@@ -257,9 +257,9 @@ export default function Search() {
           <IoIosArrowForward className='w-24 h-24 opacity-20'/>
         </div>
         <div className='w-2/6 h-full'>
-          <div className='h-5/6 border-2 px-4 pt-2 scroll-container
+          <div className='h-5/6 border-2 px-4 pt-2
                           hover:border-blue-500 rounded-xl drop-shadow-lg bg-white'>
-            <div className='w-full h-1/6 pl-32'>
+            <div className='w-full h-10 pl-36'>
               <DatePicker
                 className='text-blue-950 text-lg date tracking-wide'
                 dateFormat='yyyy년 MM월 dd일'
@@ -268,7 +268,7 @@ export default function Search() {
                 customInput={<ExampleCustomInput className="example-custom-input" />}
               />
             </div>
-            <div className='w-full h-5/6 justify-start items-center flex flex-col '>
+            <div className='w-full h-5/6 justify-start items-center flex flex-col scroll-container'>
               {sel}
             </div>
           </div>

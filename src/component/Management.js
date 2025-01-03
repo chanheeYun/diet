@@ -1,5 +1,6 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import Calendar from './calendar/Calendar'
+import React, { useCallback, useEffect, useState } from 'react';
+import Calendar from './calendar/Calendar';
+import { format } from 'date-fns';
 
 export default function Management() {
   const [selectedDate, setSelectedDate] = useState(new Date());
@@ -196,7 +197,7 @@ export default function Management() {
                                     </div>
                                   );
     setTags(tm);
-  }, [dData, tagStates, viewDetail, selectedTags]);
+  }, [dData]);
 
   return (
     <div className='w-10/12 h-full flex flex-row justify-between items-center'>
@@ -208,7 +209,10 @@ export default function Management() {
                         border-2 border-blue-300 bg-white bg-opacity-50
                         flex flex-col justify-start items-center
                         rounded-xl'>
-          <div className='h-5/6 w-full scroll-container'>
+          <div className='h-5/6 w-full scroll-container flex-col flex items-center justify-start'>
+            <div className='date tracking-wider text-lg'>
+              {format(selectedDate, 'yy년 M월 d일')} 식단 정보
+            </div>
             {tags}
           </div>
           <div className='w-full h-1/6 pl-2 flex flex-row justify-start items-end'>
