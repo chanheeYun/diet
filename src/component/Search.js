@@ -219,7 +219,7 @@ export default function Search() {
                       식품명
                     </th>
                     <th className="w-1/12 py-4 text-center">
-                      총 열량(kcal)
+                      열량(kcal)
                     </th>
                     <th className="w-1/12 py-4 text-center">
                       탄수화물(g)

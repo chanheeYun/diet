@@ -143,7 +143,7 @@ export default function Train() {
 
   useEffect(() => {
     if (!selDt) return;
-    getTrainData(selDt);
+    // getTrainData(selDt);
   },[selDt, getTrainData]);
 
   useEffect(() => {

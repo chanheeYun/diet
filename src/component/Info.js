@@ -155,6 +155,7 @@ export default function Info() {
 
   const getPersonalData = useCallback(async () => {
     const token = sessionStorage.getItem('JWT');
+    console.log('실행')
     
     // if (!token) {
     //   // JWT가 없으면 로그인 페이지로 이동
