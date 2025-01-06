@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useRef, useState, useEffect } from 'react'
 import OButton from '../UI/OButton';
 
 export default function Weight({weight, setWeight, date}) {
@@ -9,6 +9,7 @@ export default function Weight({weight, setWeight, date}) {
   const [placeholder4, setPlaceholder4] = useState('골격근량(kg)')
   const [placeholder5, setPlaceholder5] = useState('체수분(ℓ)')
   const [placeholder6, setPlaceholder6] = useState('무기질(kg)')
+  const [dt, setDt] = useState(date);
   const weightRef = useRef();
   const fatRef = useRef();
   const muscleRef = useRef();
@@ -33,8 +34,8 @@ export default function Weight({weight, setWeight, date}) {
             'muscle': muscleRef.current.value,
             'fat': fatRef.current.value,
             'water': waterRef.current.value,
-            'mineralRef': mineralRef.current.value,
-            'proteinRef': proteinRef.current.value,
+            'mineral': mineralRef.current.value,
+            'protein': proteinRef.current.value,
             'date': date
           })
       });
@@ -47,6 +48,40 @@ export default function Weight({weight, setWeight, date}) {
         console.log('Error fetching Weight:', error);
     };
   };
+
+  const getWeight = async () => {
+    const token = sessionStorage.getItem('JWT');
+    let tm = dt.replaceAll('-', '');
+    await fetch(`http://10.125.121.219:8080/member/weight?date=${tm}`,
+      {
+        method:'GET', 
+        headers: {
+          'Content-Type':'application/json',
+          'Authorization': token
+        },
+      }
+    )
+    .then(resp => resp.json())
+    .then(data => {
+      console.log('data 설정 ', data)
+      setWeight(data.weight)
+    })
+    .catch(error => {
+      console.error('Error fetching Weight Data:', error);
+    });
+  };
+
+  useEffect(() => {
+    if (dt) getWeight();
+  }, [dt]);
+
+  useEffect(() => {
+    setDt(date)
+  }, []);
+
+  useEffect(() => {
+    if (date) setDt(date);
+  }, [date]);
 
   return (
     <div className='w-full h-full'>

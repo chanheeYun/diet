@@ -14,7 +14,7 @@ export default function Management() {
     const token = sessionStorage.getItem('JWT');
 
     try {
-      const url = `http://10.125.121.219:8080/member/diet?code=${code}`;
+      const url = `http://10.125.121.219:8080/member/detail?code=${code}`;
       const response = await fetch(url, {
         method: 'get',
         headers: {

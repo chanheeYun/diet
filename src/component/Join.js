@@ -83,7 +83,7 @@ export default function Join() {
         setIsDuplicate(data.isDuplicate ? '중복' : '통과');
       } else {
         setIsDuplicate('')
-        throw new Error("fail to post Diet");
+        throw new Error("fail to join");
       }
     } catch(error) {
       setIsDuplicate('')

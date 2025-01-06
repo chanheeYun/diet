@@ -36,7 +36,7 @@ export default function Train() {
   };
 
   const delRow2 = (training) => {
-    setRows2(prev => prev.filter(item => item.training !== training));
+    setRows2(prev => prev.filter(item => item.key !== training));
   };
 
   const saveNewTrain = () => {
@@ -46,7 +46,7 @@ export default function Train() {
     }
 
     setNewData((prevData) => 
-      [...prevData, {name:trainRef.current.value, weight:weightRef.current.value, sets:setsRef.current.value, reps:repsRef.current.value}]
+      [...prevData, {training:trainRef.current.value, weight:weightRef.current.value, sets:setsRef.current.value, reps:repsRef.current.value}]
     );
     mksRow2(trainRef.current.value, weightRef.current.value, setsRef.current.value, repsRef.current.value);
   };
@@ -138,12 +138,13 @@ export default function Train() {
   useEffect(() => {
     let dt = transDate(new Date());
     dtRef.current.value = dt;
+    console.log(dt)
     setSelDt(dt);
   },[]);
 
   useEffect(() => {
     if (!selDt) return;
-    // getTrainData(selDt);
+    getTrainData(selDt);
   },[selDt, getTrainData]);
 
   useEffect(() => {
@@ -151,7 +152,7 @@ export default function Train() {
     console.log('tData', tData)
     let tm = tData.map(item => <div key={item.id} className='w-full rounded-xl h-12 flex flex-row justify-around items-center train_input'>
                                  <input name='check' type='checkbox' className='w-1/12 h-4'></input>
-                                 <div className='w-1/3 align-middle indent-3 border-r-2 text-base'>{item.name}</div>
+                                 <div className='w-1/3 align-middle indent-3 border-r-2 text-base'>{item.training}</div>
                                  <div className='w-1/6 text-center border-r-2 text-base'>{item.weight}&nbsp;kg</div>
                                  <div className='w-1/12 text-base text-right'>{item.sets}&nbsp;세트</div>
                                  <div className='w-1/12 flex justify-center text-xl'><HiOutlineXMark /></div>

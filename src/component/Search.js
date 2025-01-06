@@ -83,15 +83,15 @@ export default function Search() {
     //   return;
     // }
 
-    let data = added.map(item => ({code: item.code, 
-                                 gram: gramRefs.current[item.code], 
-                                 date: new Date()})
+    let data = added.map(item => ({ code: item.code, 
+                                    gram: gramRefs.current[item.code], 
+                                    date: date})
 
     );
     
     console.log(data);
     try {
-      const resp = await fetch(`http://10.125.121.219:8080/member/add?date=${dt}`, {
+      const resp = await fetch(`http://10.125.121.219:8080/member/diet?date=${dt}`, {
           method:'POST', 
           headers: {
               'Content-Type':'application/json',
@@ -131,7 +131,7 @@ export default function Search() {
                                                   className='w-3/6 text-right pr-1 mr-1 bg-transparent'
                                                   type='text'
                                                   name='gram'
-                                                  defaultValue='100'
+                                                  defaultValue='0'
                                                   onChange={(e) => handleInputChange(item.code, e)}
                                                 />
                                                 <span className='text-xl w-fit'>g</span>
