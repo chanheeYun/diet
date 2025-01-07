@@ -21,7 +21,7 @@ export default function Weight({weight, setWeight, date}) {
     const token = sessionStorage.getItem('JWT');
     const weight2 = weightRef.current.value;
     console.log('date:', date)
-    console.log('weight:', weight)
+    console.log('weight:', weight2)
     try {
       const resp = await fetch('http://10.125.121.219:8080/member/weight', {
           method:'POST', 
@@ -50,25 +50,47 @@ export default function Weight({weight, setWeight, date}) {
   };
 
   const getWeight = async () => {
-    const token = sessionStorage.getItem('JWT');
-    let tm = dt.replaceAll('-', '');
-    await fetch(`http://10.125.121.219:8080/member/weight?date=${tm}`,
-      {
-        method:'GET', 
-        headers: {
-          'Content-Type':'application/json',
-          'Authorization': token
-        },
+    try {
+      const token = sessionStorage.getItem("JWT");
+      let tm = dt.replaceAll("-", ""); // 날짜 포맷 변경
+      const resp = await fetch(
+        `http://10.125.121.219:8080/member/weight?date=${tm}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": token,
+          },
+        }
+      );
+  
+      console.log("resp", resp);
+  
+      // HTTP 상태 코드 확인
+      if (!resp.ok) {
+        throw new Error(`Error fetching data: ${resp.status}`);
       }
-    )
-    .then(resp => resp.json())
-    .then(data => {
-      console.log('data 설정 ', data)
-      setWeight(data.weight)
-    })
-    .catch(error => {
-      console.error('Error fetching Weight Data:', error);
-    });
+      const responseText = await resp.text();
+      if (!responseText) {
+        console.log("저장된 몸무게 없음");
+        setWeight(0);
+        return;
+      }
+      const data = JSON.parse(responseText);
+      console.log("data", data);
+  
+      // 데이터 유효성 확인
+      if (!data || data === null) {
+        console.log("No data found or invalid data.");
+        return; // 데이터가 없을 경우 조기 종료
+      }
+  
+      // 데이터가 유효한 경우
+      console.log("Data 설정", data);
+      setWeight(data.weight);
+    } catch (error) {
+      console.error("Error occurred:", error.message);
+    }
   };
 
   useEffect(() => {
@@ -81,13 +103,14 @@ export default function Weight({weight, setWeight, date}) {
 
   useEffect(() => {
     if (date) setDt(date);
+    console.log('date 변경', date)
   }, [date]);
 
   return (
     <div className='w-full h-full'>
       <div className='w-full flex justify-center items-center'>
         <button className='h-20 w-80 text-3xl bg-blue-200 nav rounded-b-2xl' onClick={() => setModalOpen(true)}>
-          {weight ? `체중 : ${weight}kg` : '체성분 정보 입력'}
+          {weight || weight === '0' ? `체중 : ${weight}kg` : '체성분 정보 입력'}
         </button>
       </div>
       {

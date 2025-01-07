@@ -5,51 +5,10 @@ import { format } from 'date-fns';
 export default function Management() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [dData, setDData] = useState([]);
-  const [tags,  setTags] = useState();
-  const [tagStates, setTagStates] = useState({});
+  const [tags, setTags] = useState();
+  const [total, setTotal] = useState();
   const [selectedTags, setSelectedTags] = useState(new Set());
   const [isAllSelected, setIsAllSelected] = useState(false);
-
-  const getDetail = useCallback(async (code) => {
-    const token = sessionStorage.getItem('JWT');
-
-    try {
-      const url = `http://10.125.121.219:8080/member/detail?code=${code}`;
-      const response = await fetch(url, {
-        method: 'get',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: token,
-        },
-      });
-      const data = await response.json();
-
-      setTagStates((prev) => ({
-        ...prev,
-        [code]: {
-          visible: true,
-          detail: data,
-        },
-      }));
-    } catch (error) {
-      console.error('Error fetching detail data:', error);
-    }
-  }, []);
-
-  const viewDetail = useCallback((code) => {
-    setTagStates((prev) => {
-      const isCurrentlyVisible = prev[code]?.visible;
-      if (isCurrentlyVisible) {
-        return {
-          ...prev, [code]: {...prev[code], visible: false},
-        };
-      }
-      getDetail(code);
-      return {
-        ...prev, [code]: {...prev[code], visible: true},
-      };
-    });
-  }, [getDetail]);
 
   const getDData = useCallback(async (date, token) => {
     // const token = sessionStorage.getItem('JWT');
@@ -66,19 +25,45 @@ export default function Management() {
       console.log(dt)
       const url = `http://10.125.121.219:8080/member/diet?date=${dt}`;
       await fetch(url, {
-          method:'get', 
+          method:'GET', 
           headers: {
               'Content-Type':'application/json',
               'Authorization': token
           },
       })
       .then(resp => resp.json())
-      .then(data => setDData(data))
+      .then(data => {
+        console.log(data)
+        setDData(data)
+      })
       .catch(err => console.error('Failed to get Diet Data', err))
     } catch(error) {
       console.log('Error fetching Diet:', error);
     };
   }, []);
+
+  // const getKData = async () => {
+  //   let kcalArr = [];
+    
+  //   try {
+  //     const url = `http://10.125.121.219:8080/member/data?code=${}`;
+  //     await fetch(url, {
+  //         method:'GET', 
+  //         headers: {
+  //             'Content-Type':'application/json',
+  //             'Authorization': token
+  //         },
+  //     })
+  //     .then(resp => resp.json())
+  //     .then(data => {
+  //       console.log(data)
+  //       setDData(data)
+  //       })
+  //     .catch(err => console.error('Failed to get Diet Data', err))
+  //   } catch(error) {
+  //     console.log('Error fetching Diet:', error);
+  //   };
+  // };
 
   const transDate = (date) => {
     if (!date) return '';
@@ -100,6 +85,7 @@ export default function Management() {
   };
 
   const handleCheckboxAllSelect = () => {
+    
     setIsAllSelected(prev => !prev);
 
     if (!isAllSelected) {
@@ -120,7 +106,8 @@ export default function Management() {
   
     try {
       const selectedArray = Array.from(selectedTags);
-      const url = `http://10.125.121.219:8080/member/diet`;
+      console.log(selectedArray)
+      const url = `http://10.125.121.219:8080/member/delDiet`;
   
       const response = await fetch(url, {
         method: 'DELETE',
@@ -160,44 +147,40 @@ export default function Management() {
   }, [selectedDate, getDData]);
 
   useEffect(() => {
-    if (!dData) return;
-
-    if (!Array.isArray(dData)) return;
-    const initialStates = dData.reduce((acc, item) => {
-      acc[item.code] = false;
-      return acc;
-    }, {});
-    setTagStates(initialStates);
-
-    const tm = dData.map((item) =>  <div key={item.num}
-                                        className="chart text-lg 
-                                                  w-10/12 h-12 flex flex-col 
-                                                  justify-start item-center 
-                                                  border-b-2 border-gray-200">
+    if (!dData || !Array.isArray(dData)) return;
+    
+    let totalKcal = dData.reduce((acc, item) => {
+      let kcal = item.kcal * item.gram / 100;
+      console.log(item.kcal, item.gram, kcal)
+      return acc + kcal;
+    }, 0);
+    
+    const tm = dData.map((item) => (
+                                    <div
+                                      key={item.num}
+                                      className="chart text-lg pt-1 w-10/12 h-12 flex flex-col justify-start item-center border-b-2 border-gray-200"
+                                    >
                                       <div className="w-full flex flex-row justify-between items-center">
-                                        <div className="hidden w-1/12 h-full">{item.code}</div>
-                                        <input type="checkbox"
-                                              checked={selectedTags.has(item.num)}
-                                              onChange={() => handleCheckboxChange(item.num)} />
-                                        <div className="w-1/4 h-full text-center pt-2.5">{item.name}</div>
-                                        <div className="w-1/4 h-full text-center pt-2.5">{item.gram}</div>
-                                        <div className="w-1/6 h-fit pt-4 pb-0.5 mt-0.5 text-xs cursor-pointer text-blue-500 underline"
-                                              onClick={() => viewDetail(item.code)}>
-                                          view detail
+                                        <div className="hidden h-full">{item.code}</div>
+                                        <input
+                                          type="checkbox"
+                                          className="mt-2 w-1/12"
+                                          checked={selectedTags.has(item.num)}
+                                          onChange={() => handleCheckboxChange(item.num)}
+                                        />
+                                        <div className="w-1/4 h-full text-center pt-2.5 text-base">
+                                          {item.name}
+                                        </div>
+                                        <div className="w-1/4 h-full text-center pt-2.5">
+                                          {item.gram}
+                                          <span>&nbsp;g</span>
                                         </div>
                                       </div>
-                                      {tagStates[item.code]?.visible && tagStates[item.code]?.detail && (
-                                        <div className="detail-box mt-2 p-2 border-t border-gray-300">
-                                          <p>Details for {tagStates[item.code].detail.name}</p>
-                                          <p>Calories: {tagStates[item.code].detail.calories}</p>
-                                          <p>Protein: {tagStates[item.code].detail.protein}</p>
-                                          <p>Fat: {tagStates[item.code].detail.fat}</p>
-                                        </div>
-                                      )}
                                     </div>
-                                  );
+                                  ));
     setTags(tm);
-  }, [dData]);
+    setTotal(totalKcal);
+  }, [dData, selectedTags]);
 
   return (
     <div className='w-10/12 h-full flex flex-row justify-between items-center'>
@@ -214,6 +197,9 @@ export default function Management() {
               {format(selectedDate, 'yy년 M월 d일')} 식단 정보
             </div>
             {tags}
+            <div className='chart h-fit w-full flex flex-row justify-end items-end text-lg px-12 pt-3'>
+              누적&nbsp;&nbsp;<span className='text-2xl font-semibold text-blue-700'>{total}</span>&nbsp;kcal
+            </div>
           </div>
           <div className='w-full h-1/6 pl-2 flex flex-row justify-start items-end'>
             <button className='btn mt-4 px-3 py-1 text-blue-400 rounded'

@@ -7,6 +7,7 @@ export default function Join() {
   const navigate = useNavigate();
   const idRef = useRef();
   const nameRef = useRef();
+  const heightRef = useRef();
   const passRef = useRef();
   const pass2Ref = useRef();
   const [idFlag, setIdFlag] = useState(false);
@@ -17,6 +18,11 @@ export default function Join() {
     if (nameRef.current.value === '') {
       alert('이름을 입력하세요.')
       nameRef.current.focus();
+      return;
+    }
+    if (heightRef.current.value === '') {
+      alert('신장(키)을 입력하세요.')
+      heightRef.current.focus();
       return;
     }
     if (idRef.current.value === '') {
@@ -48,7 +54,8 @@ export default function Join() {
             body:JSON.stringify({
                 'name' : nameRef.current.value,
                 'userid' : idRef.current.value,
-                'password' : passRef.current.value
+                'password' : passRef.current.value,
+                'height': heightRef.current.value
             })
         });
         if (resp.ok) navigate('/login')
@@ -127,6 +134,13 @@ export default function Join() {
           type='text'
           id='name'
           ref={nameRef}
+        />
+        <label htmlFor='height' className='w-full pl-2 text-xl text-left opacity-50 mt-2'>신장(키)</label>
+        <input
+          className='w-full h-12 rounded-lg indent-5 text-lg'
+          type='number'
+          id='height'
+          ref={heightRef}
         />
         <div className='w-full flex justify-start items-center mt-2'>
           <label htmlFor='id' className='w-fit pl-2 text-xl opacity-50'>아이디&nbsp;</label>

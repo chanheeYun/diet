@@ -1,6 +1,9 @@
 import { useState, useRef, useEffect, useCallback } from 'react';
 import Weight from './Weight';
 import { HiOutlineXMark } from "react-icons/hi2";
+import { IoAdd } from "react-icons/io5";
+import { PiBarbellThin } from "react-icons/pi";
+import { PiBarbellFill } from "react-icons/pi";
 
 export default function Train() {
   const [weight, setWeight] = useState();
@@ -20,8 +23,8 @@ export default function Train() {
     }
     setInputBox(false);
     const newRow = <div key={training} className='w-full rounded-xl h-12 flex flex-row justify-around items-center train_input'>
-                    <input name='check' type='checkbox' className='w-1/12 h-4'></input>
-                    <div className='w-1/3 align-middle indent-3 border-r-2 text-base'>{training}</div>
+                    <div className='w-1/12 flex justify-center text-xl'><PiBarbellThin /></div>
+                    <div className='w-4/12 align-middle indent-3 border-r-2 text-base'>{training}</div>
                     <div className='w-1/6 text-center border-r-2 text-base'>{weight}&nbsp;kg</div>
                     <div className='w-1/12 text-base text-right'>{sets}&nbsp;세트</div>
                     <div className='w-1/12 flex justify-center text-xl'><HiOutlineXMark /></div>
@@ -40,11 +43,9 @@ export default function Train() {
   };
 
   const saveNewTrain = () => {
-    if (!newData) {
-      alert('새로 저장할 내용이 없습니다.');
-      return;
+    if (trainRef.current.value === '' || weightRef.current.value === '' || setsRef.current.value === '' || repsRef.current.value === '') {
+      alert('입력되지 않은 정보가 있습니다. 빈칸 없이 모두 작성해 주세요.')
     }
-
     setNewData((prevData) => 
       [...prevData, {training:trainRef.current.value, weight:weightRef.current.value, sets:setsRef.current.value, reps:repsRef.current.value}]
     );
@@ -79,9 +80,14 @@ export default function Train() {
   }, []);
 
   const postTrain = async () => {
+    if (!newData) {
+      alert('새로 저장할 내용이 없습니다.');
+      return;
+    }
     const token = sessionStorage.getItem('JWT');
 
-    console.log(newData);
+    console.log('newData', newData);
+    console.log(selDt)
     try {
       let dt = selDt.replaceAll('-', '');
       const url = `http://10.125.121.219:8080/member/train?date=${dt}`;
@@ -93,8 +99,11 @@ export default function Train() {
           },
           body:JSON.stringify(newData)
       });
+      console.log(resp)
       if (resp.ok) {
-        getTrainData();
+        getTrainData(selDt);
+        setNewData([]);
+        setRows2([]);
       }
       else throw new Error("fail to post Diet");
     } catch(error) {
@@ -102,12 +111,11 @@ export default function Train() {
     };
   };
 
-  const delRow = useCallback(async () => {
+  const delRow = useCallback(async (id) => {
     const token = sessionStorage.getItem('JWT');
     
     try {
-      let dt = selDt.replaceAll('-', '');
-      const url = `http://10.125.121.219:8080/member/train?date=${dt}`;
+      const url = `http://10.125.121.219:8080/member/train?id=${id}`;
       const resp = await fetch(url, {
           method:'DELETE', 
           headers: {
@@ -131,7 +139,8 @@ export default function Train() {
   };
 
   const handleDtChange = (e) => {
-    setSelDt(transDate(e.target.value));
+    // console.log(e.target.value)
+    setSelDt(e.target.value);
     console.log(selDt)
   };
 
@@ -151,7 +160,7 @@ export default function Train() {
     if (!tData) return;
     console.log('tData', tData)
     let tm = tData.map(item => <div key={item.id} className='w-full rounded-xl h-12 flex flex-row justify-around items-center train_input'>
-                                 <input name='check' type='checkbox' className='w-1/12 h-4'></input>
+                                 <div className='w-1/12 flex justify-center text-xl'><PiBarbellFill /></div>
                                  <div className='w-1/3 align-middle indent-3 border-r-2 text-base'>{item.training}</div>
                                  <div className='w-1/6 text-center border-r-2 text-base'>{item.weight}&nbsp;kg</div>
                                  <div className='w-1/12 text-base text-right'>{item.sets}&nbsp;세트</div>
@@ -177,7 +186,7 @@ export default function Train() {
           </div>
           {inputBox && 
           <div className='w-full rounded-xl h-12 flex flex-row justify-around items-center train_input'>
-            <div className='w-1/12 h-4'></div>
+            <div className='w-1/12 h-4 pl-2 text-xl'><IoAdd /></div>
             <input name='training' type='text' 
                    className='w-1/3 h-8 bg-slate-50 bg-opacity-50 indent-3 border-r-2 text-base' 
                    placeholder='Training' ref={trainRef}></input>

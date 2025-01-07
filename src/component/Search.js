@@ -89,7 +89,7 @@ export default function Search() {
 
     );
     
-    console.log(data);
+    console.log('post diet data', data);
     try {
       const resp = await fetch(`http://10.125.121.219:8080/member/diet?date=${dt}`, {
           method:'POST', 

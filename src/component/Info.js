@@ -153,6 +153,13 @@ export default function Info() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [pData, setPData] = useState();
 
+  const transDate = (date) => {
+    if (!date) return '';
+    let dt = `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+    let dtArr = dt.split('-').map(a => a.length < 2 ? '0' + a : a).join('-');
+    return dtArr;
+  };
+
   const getPersonalData = useCallback(async () => {
     const token = sessionStorage.getItem('JWT');
     console.log('실행')
@@ -165,7 +172,8 @@ export default function Info() {
     // }
 
     try {
-      let dt = selectedDate.replaceAll('-', '');
+      let dt = transDate(selectedDate).replaceAll('-', '');
+      console.log(dt)
       const url = `http://10.125.121.219:8080/member/info?date=${dt}`;
       await fetch(url, {
           method:'get', 
@@ -175,7 +183,10 @@ export default function Info() {
           },
       })
       .then(resp => resp.json())
-      .then(data => setPData(data))
+      .then(data => {
+        console.log(data);
+        // setPData(data)
+      })
       .catch(err => console.error('Failed to get Personal Infomation', err))
     } catch(error) {
       console.log('Error fetching Info:', error);
