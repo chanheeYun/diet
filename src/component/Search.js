@@ -59,7 +59,7 @@ export default function Search() {
   const delAdded = useCallback((code) => {
     setTagStates((prev) => ({
       ...prev,
-      [code]: !prev[code],
+      [code]: false,
     }));
     setAdded(prev => prev.filter(item => item.code !== code));
   }, []);

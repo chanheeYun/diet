@@ -1,155 +1,21 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import Calendar from './calendar/Calendar'
-import Chart from './chart/Chart'
+import InfoChart from './chart/InfoChart'
 
 export default function Info() {
-  const datas = 
-    {
-      'diet' :
-      [
-        {
-          "date": "2024-12-30",
-          "탄수화물": 19,
-          "단백질": 113,
-          "지방": 144,
-          "당류" : 50,
-          "나트륨" : 10,
-        },
-        {
-          "date": "2024-12-31",
-          "탄수화물": 33,
-          "단백질": 154,
-          "지방": 63,
-        },
-        {
-          "date": "2025-01-01",
-          "탄수화물": 141,
-          "단백질": 96,
-          "지방": 79,
-        },
-        {
-          "date": "2025-01-02",
-          "탄수화물": 50,
-          "단백질": 70,
-          "지방": 105,
-        },
-        {
-          "date": "2025-01-03",
-          "탄수화물": 106,
-          "단백질": 78,
-          "지방": 78,
-        },
-        {
-          "date": "2025-01-04",
-          "탄수화물": 46,
-          "단백질": 132,
-          "지방": 73,
-        },
-        {
-          "date": "2025-01-05",
-          "탄수화물": 34,
-          "단백질": 12,
-          "지방": 20,
-        }
-      ],
-      'weight' : 
-      [
-        { 
-          "id": "BodyWeight",
-          "data": [
-            {
-              "x": "12-30",
-              "y": 100.7
-            },
-            {
-              "x": "12-31",
-              "y": 102.6
-            },
-            {
-              "x": "01-01",
-              "y": 103.1
-            },
-            {
-              "x": "01-02",
-              "y": 101.5
-            },
-            {
-              "x": "01-03",
-              "y": 100.3
-            },
-            {
-              "x": "01-04",
-              "y": 99.2
-            },
-            {
-              "x": "01-05",
-              "y": 97.1
-            },
-            {
-              "x": "01-06",
-              "y": 97.0
-            },
-            {
-              "x": "01-07",
-              "y": 96.4
-            },
-            {
-              "x": "01-08",
-              "y": 95
-            },
-          ]
-        }
-      ],
-      'composition' :
-      [
-        {
-          "id": "체수분",
-          "label": "체수분",
-          "value": 46.8,
-        },
-        {
-          "id": "단백질",
-          "label": "단백질",
-          "value": 12.8,
-        },
-        {
-          "id": "무기질",
-          "label": "무기질",
-          "value": 4.37,
-        },
-        {
-          "id": "체지방",
-          "label": "체지방",
-          "value": 7,
-        },
-      ],
-      'muscle' :
-      [
-        {
-          'id':'체중',
-          'value': 71,
-        },
-        {
-          'id':'골격근량',
-          'value': 36.7
-        },
-        {
-          'id':'체지방',
-          'value':7
-        }
-      ],
-      'fat' : 
-      [
-        {
-          'id':'BMI',
-          'value': 23.2,
-        },
-        {
-          'id':'체지방률',
-          'value': 9.9
-        },
-      ]
-  };
+  const [finalData, setFinalData] = useState({
+                                              'diet' : [],
+                                              'weight' : 
+                                              [ 
+                                                { 
+                                                  "id": "BodyWeight",
+                                                  "data": []
+                                                }
+                                              ],
+                                              'composition' : [],
+                                              'fat' : []
+                                            });
+  const [tags, setTags] = useState();
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [pData, setPData] = useState();
 
@@ -185,7 +51,7 @@ export default function Info() {
       .then(resp => resp.json())
       .then(data => {
         console.log(data);
-        // setPData(data)
+        setPData(data)
       })
       .catch(err => console.error('Failed to get Personal Infomation', err))
     } catch(error) {
@@ -193,13 +59,129 @@ export default function Info() {
     };
   }, [selectedDate]);
 
+  const aggregateDataByDate = (data) => {
+    const aggregated = data.reduce((acc, item) => {
+      const { date, calKcal, protein, fat, carbohydrate, sugar, natrium } = item;
+
+      // 날짜별로 존재하는 데이터를 찾아서 합산
+      if (!acc[date]) {
+        acc[date] = {
+          totalKcal: 0,
+          totalProtein: 0,
+          totalFat: 0,
+          totalCarbo: 0,
+          totalSugar: 0,
+          totalNatrium: 0,
+        };
+      }
+
+      acc[date].totalKcal += calKcal;
+      acc[date].totalProtein += protein;
+      acc[date].totalFat += fat;
+      acc[date].totalCarbo += carbohydrate;
+      acc[date].totalSugar += sugar;
+      acc[date].totalNatrium += natrium;
+
+      return acc;
+    }, {});
+    // console.log(aggregated)
+    // 객체 형태로 저장된 데이터를 배열 형태로 변환
+    let tm = Object.keys(aggregated).map(date => ({
+      date,
+      칼로리: Math.round(aggregated[date].totalKcal),
+      단백질: Math.round(aggregated[date].totalProtein),
+      지방: Math.round(aggregated[date].totalFat),
+      탄수화물: Math.round(aggregated[date].totalCarbo),
+      당류: Math.round(aggregated[date].totalSugar),
+      나트륨: Math.round(aggregated[date].totalNatrium * 0.001),
+    }));
+    
+    return tm;
+  };
+
   useEffect(() => {
     getPersonalData();
-  }, [getPersonalData]);
+  }, []);
+  
+  useEffect(() => {
+    getPersonalData();
+  }, [selectedDate]);
 
   useEffect(() => {
     if (!pData) return;
+    let tmTag = pData.trainData.map(item => <div key={item.id} className='pl-8 train_input w-full h-12 flex flex-row justify-center items-center'>
+                                              <div className='w-1/3 text-base'>{item.training}</div>
+                                              <div className='w-1/6 text-sm text-center text-gray-600'>{item.weight} kg</div>
+                                              <div className='w-1/6 text-sm text-center text-gray-600'>{item.sets} sets</div>
+                                              <div className='w-1/6 text-sm text-center text-gray-600'>{item.reps} reps</div>
+                                              <div className='w-1/6 text-base text-right'>{(item.sets * item.reps * item.weight).toLocaleString('ko-KR')}kg&nbsp;&nbsp;&nbsp;</div>
+                                            </div>
+    );
+
+    setTags(tmTag);
+
+    let tmDiet = aggregateDataByDate(pData.dietData);
+    // console.log(datas)
+
+    const calorieData = tmDiet.map(item => ({
+      date: item.date,
+      칼로리: item.칼로리,
+    }));
+
+    const nutrientData = tmDiet.map(item => {
+      const { date, 칼로리, ...others } = item;
+      return { date, ...others };
+    });
+
+    const weightData = pData.weightData.map(item => ({
+      x: item.date,
+      y: item.weight
+    }));
+
+    let tmWeight = pData.weightData.at(-1);
+    const muscleData = [
+                        {id:'체중', value: tmWeight.weight},
+                        {id:'골격근량', value: tmWeight.muscle},
+                        {id:'체지방', value: tmWeight.fat},
+                      ];
+    const compositionData = [
+                              {id:'체수분', value: tmWeight.water},
+                              {id:'단백질', value: tmWeight.protein},
+                              {id:'무기질', value: tmWeight.mineral},
+                              {id:'체지방', value: tmWeight.fat},
+                            ];
+    
+    const fatData = [
+                      {id: 'BMI', value: Math.round(10 * tmWeight.weight / (pData.memberData.height * pData.memberData.height / 10000)) / 10},
+                      {id: '체지방률', value: Math.round(tmWeight.fat / tmWeight.weight * 1000) / 10 },
+                    ];
+    console.log('calorieData', calorieData)
+    console.log('nutrientData', nutrientData)
+    console.log('weightData', weightData)
+    console.log('muscleData', muscleData)
+    console.log('compositionData', compositionData)
+    console.log('fatData', fatData)
+
+    let temp = {
+      'diet' : nutrientData,
+      'weight' : [
+        { 
+          "id": "BodyWeight",
+          "data": weightData,
+        }
+      ],
+      'composition' : compositionData,
+      'muscle' : muscleData,
+      'fat' : fatData
+    };
+
+    setFinalData(temp)
   }, [pData]);
+
+  useEffect(() => {
+    if (!finalData) return;
+    console.log('finalData', finalData)
+  }, [finalData]);
 
   return (
     <div className='w-10/12 h-full flex flex-row justify-between items-center'>
@@ -210,9 +192,16 @@ export default function Info() {
         <div className='scroll-container w-full h-full py-5 
                         border-2 border-blue-300 bg-white bg-opacity-50
                         rounded-xl'>
-          <Chart datas={datas} />
-          <div className='w-full mt-16 px-7 text-center text-2xl'>
-            운동 정보
+          <InfoChart datas={finalData} />
+          <div className='w-11/12 ml-5'>
+            <div className='mt-12 pl-8 text-center train_input w-full h-12 flex flex-row justify-center items-center border-b-2 border-b-gray-200'>
+              <div className='w-1/3 text-lg'>운동</div>
+              <div className='w-1/6 text-base'>중량</div>
+              <div className='w-1/6 text-base'>세트 수</div>
+              <div className='w-1/6 text-base'>횟수</div>
+              <div className='w-1/6 text-lg'>볼륨</div>
+            </div>
+            {tags}
           </div>
         </div>
       </div>

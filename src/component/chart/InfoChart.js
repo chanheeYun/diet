@@ -4,11 +4,11 @@ import BodyBarChart from './BodyBarChart';
 import StackChart from './StackChart';
 import WeightChart from './WeightChart';
 
-export default function Chart({datas}) {
+export default function InfoChart({datas}) {
   
   return (
     <>
-      {datas.composition &&
+      {datas['composition'] &&
         <div className='w-full h-full'>
           <div className='w-full h-fit text-center chart text-2xl pl-5'>체성분 분석</div>
           <PieChart data={datas['composition']} />

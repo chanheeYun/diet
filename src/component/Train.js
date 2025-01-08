@@ -180,36 +180,38 @@ export default function Train() {
           <Weight weight={weight} setWeight={setWeight} date={selDt} />
         </div>
         <div className='w-full h-5/6 px-6 flex flex-col justify-start items-center'>
-          <div className='w-full flex flex-col justify-center items-center'>
-            {rows1}
-            {rows2}
-          </div>
-          {inputBox && 
-          <div className='w-full rounded-xl h-12 flex flex-row justify-around items-center train_input'>
-            <div className='w-1/12 h-4 pl-2 text-xl'><IoAdd /></div>
-            <input name='training' type='text' 
-                   className='w-1/3 h-8 bg-slate-50 bg-opacity-50 indent-3 border-r-2 text-base' 
-                   placeholder='Training' ref={trainRef}></input>
-            <input name='weight' type='text' 
-                   className='w-1/6 h-8 bg-slate-50 bg-opacity-50 text-center border-r-2' 
-                   placeholder='Weight' ref={weightRef}></input>
-            <input name='sets' type='number' 
-                   className='w-1/12 h-8 bg-slate-50 bg-opacity-50 text-center pl-2' 
-                   placeholder='Sets' ref={setsRef}></input>
-            <div className='w-1/12 flex justify-center text-xl'><HiOutlineXMark /></div>
-            <input name='reps' type='number' 
-                   className='w-1/12 h-8 bg-slate-50 bg-opacity-50 text-center border-r-2 pr-2' 
-                   placeholder='Reps' ref={repsRef}></input>
-            <div className='w-1/6 h-8'>
-              <button className='text-blue-500 text-left px-2 py-1 hover:underline underline-offset-4' 
-                      onClick={saveNewTrain}>Save</button>
+          <div className='w-full h-5/6'>
+            <div className='w-full flex flex-col justify-center items-center'>
+              {rows1}
+              {rows2}
             </div>
-          </div>}
-          <div className='w-full h-5/6 border-t-2'>
-            <button className='nav text-slate-400 mt-3 
-                              hover:text-black hover:outline outline-slate-200 
-                              rounded-xl px-2 py-1'
-                    onClick={() => setInputBox(true)}>add</button>
+            {inputBox && 
+            <div className='w-full rounded-xl h-12 flex flex-row justify-around items-center train_input'>
+              <div className='w-1/12 h-4 pl-2 text-xl'><IoAdd /></div>
+              <input name='training' type='text' 
+                    className='w-1/3 h-8 bg-slate-50 bg-opacity-50 indent-3 border-r-2 text-base' 
+                    placeholder='Training' ref={trainRef}></input>
+              <input name='weight' type='text' 
+                    className='w-1/6 h-8 bg-slate-50 bg-opacity-50 text-center border-r-2' 
+                    placeholder='Weight' ref={weightRef}></input>
+              <input name='sets' type='number' 
+                    className='w-1/12 h-8 bg-slate-50 bg-opacity-50 text-center pl-2' 
+                    placeholder='Sets' ref={setsRef}></input>
+              <div className='w-1/12 flex justify-center text-xl'><HiOutlineXMark /></div>
+              <input name='reps' type='number' 
+                    className='w-1/12 h-8 bg-slate-50 bg-opacity-50 text-center border-r-2 pr-2' 
+                    placeholder='Reps' ref={repsRef}></input>
+              <div className='w-1/6 h-8'>
+                <button className='text-blue-500 text-left px-2 py-1 hover:underline underline-offset-4' 
+                        onClick={saveNewTrain}>Save</button>
+              </div>
+            </div>}
+            <div className='w-full h-5/6 border-t-2'>
+              <button className='nav text-slate-400 mt-3 
+                                hover:text-black hover:outline outline-slate-200 
+                                rounded-xl px-2 py-1'
+                      onClick={() => setInputBox(true)}>add</button>
+            </div>
           </div>
           <div className='h-1/6 w-full flex flex-row justify-between items-center'>
             <button className='w-1/12 pt-2 py-1 btn bg-slate-200 hover:bg-slate-400 rounded-xl hover:text-white' onClick={postTrain}>저장</button>

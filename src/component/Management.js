@@ -197,11 +197,10 @@ export default function Management() {
               {format(selectedDate, 'yy년 M월 d일')} 식단 정보
             </div>
             {tags}
-            <div className='chart h-fit w-full flex flex-row justify-end items-end text-lg px-12 pt-3'>
-              누적&nbsp;&nbsp;<span className='text-2xl font-semibold text-blue-700'>{total}</span>&nbsp;kcal
-            </div>
+            
           </div>
-          <div className='w-full h-1/6 pl-2 flex flex-row justify-start items-end'>
+          <div className='w-full h-1/6 pl-2 flex flex-row justify-between items-center'>
+          <div className='w-1/3 h-full flex flex-row justify-between items-end'>
             <button className='btn mt-4 px-3 py-1 text-blue-400 rounded'
                     onClick={handleCheckboxAllSelect}>
               {isAllSelected ? '전체 해제' : '전체 선택'}
@@ -210,6 +209,10 @@ export default function Management() {
                     onClick={handleDelete}>
               선택 삭제
             </button>
+          </div>
+            <div className='chart h-fit w-full flex flex-row justify-end items-end text-lg px-12 pt-3'>
+              누적&nbsp;&nbsp;<span className='text-2xl font-semibold text-blue-700'>{total}</span>&nbsp;kcal
+            </div>
           </div>
         </div>
       </div>
