@@ -107,7 +107,7 @@ export default function Management() {
     try {
       const selectedArray = Array.from(selectedTags);
       console.log(selectedArray)
-      const url = `http://10.125.121.219:8080/member/delDiet`;
+      const url = `http://10.125.121.219:8080/member/diet`;
   
       const response = await fetch(url, {
         method: 'DELETE',
@@ -171,9 +171,12 @@ export default function Management() {
                                         <div className="w-1/4 h-full text-center pt-2.5 text-base">
                                           {item.name}
                                         </div>
-                                        <div className="w-1/4 h-full text-center pt-2.5">
+                                        <div className="w-1/4 h-full text-right pr-10  pt-2.5">
                                           {item.gram}
                                           <span>&nbsp;g</span>
+                                        </div>
+                                        <div className="w-1/4 h-full text-right pr-8 pt-2.5">
+                                          {(item.kcal * item.gram / 100).toLocaleString('ko-KR')} kcal
                                         </div>
                                       </div>
                                     </div>
@@ -197,20 +200,19 @@ export default function Management() {
               {format(selectedDate, 'yy년 M월 d일')} 식단 정보
             </div>
             {tags}
-            
           </div>
           <div className='w-full h-1/6 pl-2 flex flex-row justify-between items-center'>
-          <div className='w-1/3 h-full flex flex-row justify-between items-end'>
-            <button className='btn mt-4 px-3 py-1 text-blue-400 rounded'
-                    onClick={handleCheckboxAllSelect}>
-              {isAllSelected ? '전체 해제' : '전체 선택'}
-            </button>
-            <button className='btn mt-4 px-3 py-1 text-blue-400 rounded'
-                    onClick={handleDelete}>
-              선택 삭제
-            </button>
-          </div>
-            <div className='chart h-fit w-full flex flex-row justify-end items-end text-lg px-12 pt-3'>
+            <div className='w-5/12 h-full flex flex-row justify-between items-center pt-4 pl-4'>
+              <button className='btn mt-4 px-3 py-1 text-blue-400 rounded'
+                      onClick={handleCheckboxAllSelect}>
+                {isAllSelected ? '전체 해제' : '전체 선택'}
+              </button>
+              <button className='btn mt-4 px-3 py-1 text-blue-400 rounded'
+                      onClick={handleDelete}>
+                선택 삭제
+              </button>
+            </div>
+            <div className='chart h-fit w-full flex flex-row justify-end items-end text-lg px-12 pt-3 pr-24'>
               누적&nbsp;&nbsp;<span className='text-2xl font-semibold text-blue-700'>{total}</span>&nbsp;kcal
             </div>
           </div>

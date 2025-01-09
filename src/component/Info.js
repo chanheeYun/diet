@@ -155,12 +155,12 @@ export default function Info() {
                       {id: 'BMI', value: Math.round(10 * tmWeight.weight / (pData.memberData.height * pData.memberData.height / 10000)) / 10},
                       {id: '체지방률', value: Math.round(tmWeight.fat / tmWeight.weight * 1000) / 10 },
                     ];
-    console.log('calorieData', calorieData)
-    console.log('nutrientData', nutrientData)
-    console.log('weightData', weightData)
-    console.log('muscleData', muscleData)
-    console.log('compositionData', compositionData)
-    console.log('fatData', fatData)
+    // console.log('calorieData', calorieData)
+    // console.log('nutrientData', nutrientData)
+    // console.log('weightData', weightData)
+    // console.log('muscleData', muscleData)
+    // console.log('compositionData', compositionData)
+    // console.log('fatData', fatData)
 
     let temp = {
       'diet' : nutrientData,
@@ -192,17 +192,23 @@ export default function Info() {
         <div className='scroll-container w-full h-full py-5 
                         border-2 border-blue-300 bg-white bg-opacity-50
                         rounded-xl'>
-          <InfoChart datas={finalData} />
-          <div className='w-11/12 ml-5'>
-            <div className='mt-12 pl-8 text-center train_input w-full h-12 flex flex-row justify-center items-center border-b-2 border-b-gray-200'>
-              <div className='w-1/3 text-lg'>운동</div>
-              <div className='w-1/6 text-base'>중량</div>
-              <div className='w-1/6 text-base'>세트 수</div>
-              <div className='w-1/6 text-base'>횟수</div>
-              <div className='w-1/6 text-lg'>볼륨</div>
-            </div>
+          <div className='w-11/12 ml-5 mb-10'>
+            {tags !== null &&
+            <div className='w-full flex flex-col justify-center items-center'>
+              <div className='w-full h-10 text-2xl text-center chart mb-2'>
+                운동 정보
+              </div>
+              <div className='pl-8 text-center train_input w-full h-12 flex flex-row justify-center items-center border-b-2 border-b-gray-200'>
+                <div className='w-1/3 text-lg'>운동&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                <div className='w-1/6 text-base'>중량</div>
+                <div className='w-1/6 text-base'>세트 수</div>
+                <div className='w-1/6 text-base'>횟수</div>
+                <div className='w-1/6 text-lg'>볼륨</div>
+              </div>
+            </div>}
             {tags}
           </div>
+          <InfoChart datas={finalData} />
         </div>
       </div>
     </div>

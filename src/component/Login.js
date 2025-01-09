@@ -36,7 +36,7 @@ export default function Login() {
           sessionStorage.setItem('JWT', token);
           setLoginFlag(true);
           console.log(loginFlag)
-          navigate('/'); // 로그인 성공시 홈으로 이동합니다.
+          navigate('/');
         } else {
           setLoginFlag(false);
         }

@@ -113,7 +113,7 @@ export default function Train() {
 
   const delRow = useCallback(async (id) => {
     const token = sessionStorage.getItem('JWT');
-    
+    console.log(id)
     try {
       const url = `http://10.125.121.219:8080/member/train?id=${id}`;
       const resp = await fetch(url, {
@@ -125,8 +125,10 @@ export default function Train() {
         }
       );
 
-      if (resp.ok) console.log('Data deleted successfully');
-      else console.error('Failed to delete data:', resp.status);
+      if (resp.ok) {
+        console.log('Data deleted successfully');
+        getTrainData(selDt);
+      } else console.error('Failed to delete data:', resp.status);
     } catch(error) {
         console.log('Error fetching Train:', error);
     };

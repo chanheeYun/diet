@@ -3,6 +3,8 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
 import { isLogined } from './recoil/Atoms';
+import { useEffect } from 'react';
+import logo from './img/logo2.svg';
 import Home from './component/Home';
 import Login from './component/Login';
 import Join from './component/Join';
@@ -11,11 +13,9 @@ import Diet from './component/Diet';
 import Train from './component/Train';
 import RouteNav from './component/RouteNav';
 import Info from './component/Info';
-import logo from './img/logo2.svg';
 import Asdf from './component/Asdf';
 import Search from './component/Search';
 import Logout from './component/Logout';
-import { useEffect } from 'react';
 import Management from './component/Management';
 
 function App() {

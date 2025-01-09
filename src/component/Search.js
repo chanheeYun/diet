@@ -251,6 +251,9 @@ export default function Search() {
                   <p className='content1 opacity-20 text-xl'>검색 결과가 없습니다.</p>
                 </div>
             }
+            <div className='sticky bottom-0 h-fit w-full text-right pr-3 text-sm bg-white'>
+              * 100g 기준
+            </div>
           </div>
         </div>
         <div className='w-fit h-full flex justify-center items-center'>

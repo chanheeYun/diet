@@ -58,8 +58,10 @@ export default function Join() {
                 'height': heightRef.current.value
             })
         });
-        if (resp.ok) navigate('/login')
-        else throw new Error("fail to post Member");
+        if (resp.ok) {
+          alert('회원가입이 완료 되었습니다. 로그인 페이지로 이동합니다.')
+          navigate('/login')
+        } else throw new Error("fail to post Member");
     } catch(error) {
         console.log('Error fetching Member:', error);
     };
@@ -74,8 +76,8 @@ export default function Join() {
       return;
     } 
 
-    const regex = /^[a-zA-Z0-9_-]+$/;
-    if (!regex.test(idRef.current.value)) {
+    const idRegex = /^[a-zA-Z0-9_-]+$/;
+    if (!idRegex.test(idRef.current.value)) {
       alert('아이디는 특수문자나 공백을 포함할 수 없습니다.')
       setIdFlag(false);
       idRef.current.focus();
@@ -118,6 +120,13 @@ export default function Join() {
 
   const validatePassword = (e) => {
     e.preventDefault();
+    const passwordRegex = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
+    if (!passwordRegex.test(passRef.current.value)) {
+      alert('비밀번호는 숫자+영문자+특수문자 조합으로 8자리 이상 입력해주세요.')
+      passRef.current.focus();
+      return;
+    }
+
     if (passRef.current.value === pass2Ref.current.value) {
       setPassCheck(true);
     } else {
