@@ -13,12 +13,12 @@ export default function Management() {
   const getDData = useCallback(async (date, token) => {
     // const token = sessionStorage.getItem('JWT');
     
-    // if (!token) {
-    //   // JWT가 없으면 로그인 페이지로 이동 처음 로드 시에 한번만 확인
-    //   alert('session이 만료되어 로그인 페이지로 이동합니다.')
-    //   window.location.href = '/login';
-    //   return;
-    // }
+    if (!token) {
+      // JWT가 없으면 로그인 페이지로 이동
+      alert('로그인 후에 이용 가능합니다.')
+      window.location.href = '/login';
+      return;
+    }
 
     try {
       let dt = date.replaceAll('-', '');
@@ -182,7 +182,7 @@ export default function Management() {
                                     </div>
                                   ));
     setTags(tm);
-    setTotal(totalKcal);
+    setTotal(totalKcal.toLocaleString('ko-KR'));
   }, [dData, selectedTags]);
 
   return (
@@ -201,7 +201,7 @@ export default function Management() {
             </div>
             {tags}
           </div>
-          <div className='w-full h-1/6 pl-2 flex flex-row justify-between items-center'>
+          <div className='w-full h-1/6 pl-14 flex flex-row justify-between items-center'>
             <div className='w-5/12 h-full flex flex-row justify-between items-center pt-4 pl-4'>
               <button className='btn mt-4 px-3 py-1 text-blue-400 rounded'
                       onClick={handleCheckboxAllSelect}>

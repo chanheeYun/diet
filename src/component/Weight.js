@@ -50,8 +50,16 @@ export default function Weight({weight, setWeight, date}) {
   };
 
   const getWeight = async () => {
+    const token = sessionStorage.getItem("JWT");
+
+    if (!token) {
+      // JWT가 없으면 로그인 페이지로 이동
+      alert('로그인 후에 이용 가능합니다.')
+      window.location.href = '/login';
+      return;
+    }
+    
     try {
-      const token = sessionStorage.getItem("JWT");
       let tm = dt.replaceAll("-", ""); // 날짜 포맷 변경
       const resp = await fetch(
         `http://10.125.121.219:8080/member/weight?date=${tm}`,

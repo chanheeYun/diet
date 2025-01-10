@@ -30,12 +30,12 @@ export default function Info() {
     const token = sessionStorage.getItem('JWT');
     console.log('실행')
     
-    // if (!token) {
-    //   // JWT가 없으면 로그인 페이지로 이동
-    //   alert('session이 만료되어 로그인 페이지로 이동합니다.')
-    //   window.location.href = '/login';
-    //   return;
-    // }
+    if (!token) {
+      // JWT가 없으면 로그인 페이지로 이동
+      alert('로그인 후에 이용 가능합니다.')
+      window.location.href = '/login';
+      return;
+    }
 
     try {
       let dt = transDate(selectedDate).replaceAll('-', '');
@@ -123,10 +123,10 @@ export default function Info() {
     let tmDiet = aggregateDataByDate(pData.dietData);
     // console.log(datas)
 
-    const calorieData = tmDiet.map(item => ({
-      date: item.date,
-      칼로리: item.칼로리,
-    }));
+    // const calorieData = tmDiet.map(item => ({
+    //   date: item.date,
+    //   칼로리: item.칼로리,
+    // }));
 
     const nutrientData = tmDiet.map(item => {
       const { date, 칼로리, ...others } = item;
