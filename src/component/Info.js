@@ -139,6 +139,12 @@ export default function Info() {
     }));
 
     let tmWeight = pData.weightData.at(-1);
+    if (!tmWeight) {
+      alert('해당 유저의 저장된 정보가 없습니다. 체성분 정보를 입력하세요');
+      window.location.href = '/train';
+      return;
+    }
+    
     const muscleData = [
                         {id:'체중', value: tmWeight.weight},
                         {id:'골격근량', value: tmWeight.muscle},
